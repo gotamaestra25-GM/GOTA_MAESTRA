@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>GOTA MAESTRA</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <img src="imagenes gmaestra/logos/logos sin fondo y sin color/isotipo gmaestra.svg" alt="Gota Maestra"
+          class="logo-img" onerror="this.style.display='none'">
+        <div class="logo-text">
+          <h1>GOTA MAESTRA HN</h1>
+          <p>Inspiraciones Premium</p>
+        </div>
+      </div>
+      <div class="nav-links"><a href="#catalogo">Catálogo</a><a href="#contacto">Contacto</a></div>
+      <div class="cart-icon" id="cartIconBtn"><span>Mi pedido</span><span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#catalogo" onclick="closeMobile()">Catálogo</a>
+      <a href="#contacto" onclick="closeMobile()">Contacto</a>
+      <a href="#" id="mobileCartLink"> Carrito (<span id="mobileCartCount">0</span>)</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <img src="imagenes gmaestra/imagenes_extra/imagen1.png" alt="Background" class="hero-bg"
+      onerror="console.log('No se encontró imagen1.png')">
+    <div class="hero-content">
+      <h2>Fragancias que inspiran</h2>
+      <p style="font-family: 'Playfair Display', serif; font-size: 1.25rem; line-height: 1.7; max-width: 750px; margin: 24px auto; font-weight: 400; font-style: italic; color: #3a2e25; letter-spacing: 0.3px;">Creamos perfumes inspirados en las fragancias más icónicas del mundo, elaboradas con esencias de alta fidelidad, diseñadas para ofrecerte la misma experiencia sensorial y duradera de tus perfumes favoritos.</p>
+      <button class="btn-hero" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Ver
+        catálogo</button>
+    </div>
+  </section>
+
+  <div class="filtros-wrapper">
+    <div class="filtros-bar">
+      <div class="search-box"><span>🔍</span><input type="text" id="searchInput"
+          placeholder="Buscar loción... ej: Bleu de Chanel, One Million..."></div>
+      <div class="filtro-group"><button class="filtro-btn active" data-genero="todos">Todos</button><button
+          class="filtro-btn" data-genero="caballero">Caballero</button><button class="filtro-btn"
+          data-genero="dama">Dama</button></div>
+      <div class="counter" id="resultCounter">0 productos</div>
+    </div>
+  </div>
+
+  <div class="disclaimer">Aviso: Productos de inspiración premium de alta calidad. No son originales ni están afiliados
+    a las marcas.</div>
+
+  <div class="container" id="catalogo">
+    <div class="productos-grid" id="productosGrid"></div>
+  </div>
+
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Detalles de la fragancia</h3><button class="modal-close" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Tu pedido</h3><button class="close-cart" id="closeCartBtn">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItemsList">
+      <div style="text-align:center;padding:30px;">Carrito vacío</div>
+    </div>
+    <div class="cart-total" style="background: rgba(255, 255, 255, 0.85); border-radius: 20px; padding: 20px; margin: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.8);">
+      <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; color: var(--texto);">Resumen del Pedido</h4>
+      
+      <div style="display:flex;justify-content:space-between; font-size: 0.85rem; color: var(--texto-suave);">
+        <span>Subtotal</span>
+        <span id="cartSubtotalPrice">L. 0</span>
+      </div>
+      
+      <div style="display:flex;justify-content:space-between; font-size: 0.85rem; color: var(--texto-suave);">
+        <span>Envío estimado</span>
+        <span style="color: #25d366; font-weight: 600;">No incluido</span>
+      </div>
+      
+      <hr style="border: none; border-top: 1px solid rgba(212, 188, 160, 0.3); margin: 8px 0;">
+      
+      <div style="display:flex;justify-content:space-between; align-items: center; font-weight:700; font-size:1.25rem; color:var(--primario-oscuro);">
+        <span>Total</span>
+        <span id="cartTotalPrice">L. 0</span>
+      </div>
+      
+      <button class="btn-whatsapp-cart" id="sendWhatsappBtn" style="margin-top: 12px; font-size: 0.95rem; padding: 14px; border-radius: 12px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);">Proceder al pedido (WhatsApp)</button>
+      <button class="vaciar-btn" id="clearCartBtn" style="border: none; background: transparent; color: #a3a3a3; font-size: 0.8rem; text-decoration: underline; margin-top: 4px;">Vaciar carrito</button>
+    </div>
+  </div>
+
+  <section id="contacto" style="padding:48px 24px;text-align:center;">
+    <h3 style="font-family:'Playfair Display';font-size:1.6rem;">¿Dudas o pedido especial?</h3>
+    <p style="margin:12px 0;">Escríbenos directamente a nuestro WhatsApp para atención personalizada.</p>
+    <a href="https://wa.me/50431529980?text=Hola%2C%20quisiera%20hacer%20un%20pedido%20de%20inspiraciones%20premium"
+      target="_blank"
+      style="background:#25d366;color:white;padding:12px 28px;border-radius:40px;text-decoration:none;display:inline-flex;gap:12px;">
+      +504 3152-9980 · WhatsApp</a>
+  </section>
+
+  <footer>
+    <p>© 2025 GOTA MAESTRA HN – Inspiraciones premium de calidad. Envíos a nivel nacional.</p>
+    <p style="font-size:0.7rem;">Todos los nombres de marca son referencias de inspiración. No somos propietarios de
+      marcas originales.</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
