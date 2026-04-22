@@ -825,6 +825,20 @@ footer {
 }
 
 @media (max-width: 780px) {
+  .logo-img {
+    height: 40px;
+  }
+  .logo h1 {
+    font-size: 1.1rem;
+  }
+  .logo p {
+    font-size: 0.55rem;
+    letter-spacing: 1px;
+  }
+  .header-container {
+    height: 60px;
+  }
+  
   .nav-links, .cart-icon span:first-child {
     display: none;
   }
@@ -835,7 +849,13 @@ footer {
     margin-top: 60px;
   }
   .hero h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+  }
+  .hero-content p {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    margin: 12px auto !important;
+    padding: 0 10px;
   }
   .filtros-wrapper {
     top: 60px;
