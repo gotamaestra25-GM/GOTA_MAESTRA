@@ -306,6 +306,12 @@ function sendOrderToWhatsapp() {
   mensaje += `\n⚠️ _Nota: El costo de envío se calculará por separado_\n_y no está incluido en el total de arriba._\n\n¡Gracias!`;
 
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(mensaje)}`, '_blank');
+  
+  // Limpiar el carrito después de enviar el pedido
+  cart = [];
+  saveCart();
+  renderCartSidebar();
+  closeCartSidebar();
 }
 
 function closeMobile() {
