@@ -42,7 +42,10 @@
       onerror="console.log('No se encontró imagen1.png')">
     <div class="hero-content">
       <h2>Fragancias que inspiran</h2>
-      <p style="font-family: 'Playfair Display', serif; font-size: 1.25rem; line-height: 1.7; max-width: 750px; margin: 24px auto; font-weight: 400; font-style: italic; color: #3a2e25; letter-spacing: 0.3px;">Creamos perfumes inspirados en las fragancias más icónicas del mundo, elaboradas con esencias de alta fidelidad, diseñadas para ofrecerte la misma experiencia sensorial y duradera de tus perfumes favoritos.</p>
+      <p
+        style="font-family: 'Playfair Display', serif; font-size: 1.25rem; line-height: 1.7; max-width: 750px; margin: 24px auto; font-weight: 400; font-style: italic; color: #3a2e25; letter-spacing: 0.3px;">
+        Creamos perfumes inspirados en las fragancias más icónicas del mundo, elaboradas con esencias de alta fidelidad,
+        diseñadas para ofrecerte la experiencia sensorial y duradera de tus perfumes favoritos.</p>
       <button class="btn-hero" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Ver
         catálogo</button>
     </div>
@@ -83,28 +86,34 @@
     <div class="cart-items" id="cartItemsList">
       <div style="text-align:center;padding:30px;">Carrito vacío</div>
     </div>
-    <div class="cart-total" style="background: rgba(255, 255, 255, 0.85); border-radius: 20px; padding: 20px; margin: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.8);">
+    <div class="cart-total"
+      style="background: rgba(255, 255, 255, 0.85); border-radius: 20px; padding: 20px; margin: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.8);">
       <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; color: var(--texto);">Resumen del Pedido</h4>
-      
+
       <div style="display:flex;justify-content:space-between; font-size: 0.85rem; color: var(--texto-suave);">
         <span>Subtotal</span>
         <span id="cartSubtotalPrice">L. 0</span>
       </div>
-      
+
       <div style="display:flex;justify-content:space-between; font-size: 0.85rem; color: var(--texto-suave);">
         <span>Envío estimado</span>
         <span style="color: #25d366; font-weight: 600;">No incluido</span>
       </div>
-      
+
       <hr style="border: none; border-top: 1px solid rgba(212, 188, 160, 0.3); margin: 8px 0;">
-      
-      <div style="display:flex;justify-content:space-between; align-items: center; font-weight:700; font-size:1.25rem; color:var(--primario-oscuro);">
+
+      <div
+        style="display:flex;justify-content:space-between; align-items: center; font-weight:700; font-size:1.25rem; color:var(--primario-oscuro);">
         <span>Total</span>
         <span id="cartTotalPrice">L. 0</span>
       </div>
-      
-      <button class="btn-whatsapp-cart" id="sendWhatsappBtn" style="margin-top: 12px; font-size: 0.95rem; padding: 14px; border-radius: 12px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);">Proceder al pedido (WhatsApp)</button>
-      <button class="vaciar-btn" id="clearCartBtn" style="border: none; background: transparent; color: #a3a3a3; font-size: 0.8rem; text-decoration: underline; margin-top: 4px;">Vaciar carrito</button>
+
+      <button class="btn-whatsapp-cart" id="sendWhatsappBtn"
+        style="margin-top: 12px; font-size: 0.95rem; padding: 14px; border-radius: 12px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);">Proceder
+        al pedido (WhatsApp)</button>
+      <button class="vaciar-btn" id="clearCartBtn"
+        style="border: none; background: transparent; color: #a3a3a3; font-size: 0.8rem; text-decoration: underline; margin-top: 4px;">Vaciar
+        carrito</button>
     </div>
   </div>
 
