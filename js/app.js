@@ -52,6 +52,8 @@ function updateCartUI() {
   const totalItems = cart.reduce((acc, i) => acc + i.cantidad, 0);
   cartCountSpan.innerText = totalItems;
   if (mobileCartCount) mobileCartCount.innerText = totalItems;
+  const floatingCount = document.getElementById('floatingCartCount');
+  if (floatingCount) floatingCount.innerText = totalItems;
   renderCartSidebar();
 }
 
