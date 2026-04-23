@@ -308,7 +308,7 @@ function sendOrderToWhatsapp() {
   mensaje += `\n⚠️ _Nota: El costo de envío se calculará por separado_\n_y no está incluido en el total de arriba._\n\n¡Gracias!`;
 
   // Registrar pedido en Google Sheets
-  const SHEET_URL = "https://script.google.com/macros/s/AKfycbwYp2izMTSZsrSmmtQxxbmNiAw30v3asWSZ3s_R_4qSRGDiunLoX5nrhSmPF5dLuz7DCw/exec";
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbx22TsikN3vvkQQVDh9MMawk5uENVjtGD4TGADhN6R_b-iJ1RM3ElPpyQbZaHy5PRJd9g/exec";
   const orderData = {
     items: cart.map(item => ({
       nombre: item.nombre,
