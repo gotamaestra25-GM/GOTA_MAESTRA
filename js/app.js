@@ -367,8 +367,21 @@ document.querySelectorAll('.filtro-btn').forEach(btn => {
   });
 });
 
+const clearSearchBtn = document.getElementById('clearSearch');
 searchInput.addEventListener('input', () => {
+  if (searchInput.value.length > 0) {
+    clearSearchBtn.style.display = 'block';
+  } else {
+    clearSearchBtn.style.display = 'none';
+  }
   renderProductos();
+});
+
+clearSearchBtn?.addEventListener('click', () => {
+  searchInput.value = '';
+  clearSearchBtn.style.display = 'none';
+  renderProductos();
+  searchInput.focus();
 });
 
 document.getElementById('cartIconBtn')?.addEventListener('click', openCartSidebar);

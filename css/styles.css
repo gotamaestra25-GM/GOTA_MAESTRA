@@ -283,6 +283,20 @@ header.header-scrolled .header-container {
   outline: none;
 }
 
+.clear-search {
+  cursor: pointer;
+  color: var(--texto-suave);
+  font-size: 1.4rem;
+  padding-left: 8px;
+  line-height: 1;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.clear-search:hover {
+  color: var(--primario);
+}
+
 .filtro-group {
   display: flex;
   gap: 8px;
