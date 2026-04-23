@@ -323,8 +323,7 @@ function sendOrderToWhatsapp() {
   fetch(SHEET_URL, {
     method: 'POST',
     mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(orderData)
+    body: new Blob([JSON.stringify(orderData)], { type: 'application/json' })
   }).catch(err => console.log("Error Sheets:", err));
 
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(mensaje)}`, '_blank');
