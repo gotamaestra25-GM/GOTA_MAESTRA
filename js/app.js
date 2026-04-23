@@ -157,11 +157,15 @@ function showToast(mensaje) {
 function openCartSidebar() {
   cartSidebar.classList.add('open');
   cartOverlayEl.classList.add('open');
+  history.pushState({ sidebar: 'cart' }, "");
 }
 
-function closeCartSidebar() {
+function closeCartSidebar(isPopState = false) {
   cartSidebar.classList.remove('open');
   cartOverlayEl.classList.remove('open');
+  if (isPopState !== true && window.history.state?.sidebar === 'cart') {
+    history.back();
+  }
 }
 
 // ========== FUNCIONES DEL MODAL ==========
@@ -172,12 +176,24 @@ function openModal(product) {
   renderModalContent();
   modalOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+  
+  // Siempre resetear el scroll al inicio (arriba)
+  const container = document.querySelector('.modal-container');
+  if (container) container.scrollTop = 0;
+  
+  // Agregar estado al historial para que el botón "atrás" cierre el modal
+  history.pushState({ modal: 'product' }, "");
 }
 
-function closeModal() {
+function closeModal(isPopState = false) {
   modalOverlay.classList.remove('open');
   currentModalProduct = null;
   document.body.style.overflow = '';
+  
+  // Si se cerró manualmente (no por botón atrás), quitar el estado del historial
+  if (isPopState !== true && window.history.state?.modal === 'product') {
+    history.back();
+  }
 }
 
 function renderModalContent() {
@@ -425,6 +441,18 @@ renderProductos = function () {
   originalRenderProductos();
   observeCards();
 };
+
+// ========== MANEJO DEL BOTÓN ATRÁS (MÓVIL) ==========
+window.addEventListener('popstate', (e) => {
+  // Si hay un modal abierto, lo cerramos
+  if (modalOverlay.classList.contains('open')) {
+    closeModal(true);
+  }
+  // Si el carrito está abierto, lo cerramos
+  if (cartSidebar.classList.contains('open')) {
+    closeCartSidebar(true);
+  }
+});
 
 // Activar para la carga inicial
 observeCards();
