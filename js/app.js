@@ -311,6 +311,7 @@ function sendOrderToWhatsapp() {
   const SHEET_URL = "https://script.google.com/macros/s/AKfycbwYp2izMTSZsrSmmtQxxbmNiAw30v3asWSZ3s_R_4qSRGDiunLoX5nrhSmPF5dLuz7DCw/exec";
   const orderData = {
     items: cart.map(item => ({
+      id: item.id,
       nombre: item.nombre,
       genero: item.genero,
       ml: item.ml,
