@@ -307,7 +307,7 @@ function sendOrderToWhatsapp() {
   mensaje += `\n📍 *Información para envío:*\n- Nombre quien recibe:\n- Teléfono:\n- Dirección exacta:\n`;
   mensaje += `\n⚠️ _Nota: El costo de envío se calculará por separado_\n_y no está incluido en el total de arriba._\n\n¡Gracias!`;
 
-  // Registrar pedido en Google Sheets
+  // Registrar pedido en Google Sheets (via formulario oculto)
   const SHEET_URL = "https://script.google.com/macros/s/AKfycbwYp2izMTSZsrSmmtQxxbmNiAw30v3asWSZ3s_R_4qSRGDiunLoX5nrhSmPF5dLuz7DCw/exec";
   const orderData = {
     items: cart.map(item => ({
@@ -320,12 +320,29 @@ function sendOrderToWhatsapp() {
     total: total
   };
 
-  fetch(SHEET_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(orderData)
-  }).catch(() => {});
+  // Crear iframe oculto para recibir la respuesta
+  let iframe = document.getElementById('sheet-iframe');
+  if (!iframe) {
+    iframe = document.createElement('iframe');
+    iframe.id = 'sheet-iframe';
+    iframe.name = 'sheet-iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+  }
+
+  // Crear formulario oculto y enviarlo
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = SHEET_URL;
+  form.target = 'sheet-iframe';
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'data';
+  input.value = JSON.stringify(orderData);
+  form.appendChild(input);
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
 
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(mensaje)}`, '_blank');
 
