@@ -1099,7 +1099,6 @@ footer {
   z-index: 2100;
   width: 100%;
   pointer-events: none;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mobile-bottom-nav .nav-container {
@@ -1107,41 +1106,40 @@ footer {
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  position: relative;
-  min-height: 64px;
   pointer-events: auto;
-  padding: 0 15px;
 }
+
 
 
 
 
 .nav-pill-container {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(30px) saturate(210%);
-  -webkit-backdrop-filter: blur(30px) saturate(210%);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(25px) saturate(210%);
+  -webkit-backdrop-filter: blur(25px) saturate(210%);
   border-radius: 100px;
-  padding: 6px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
-  gap: 2px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18);
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 58px;
-  width: auto;
-  max-width: 95%;
-  position: relative;
+  min-height: 54px;
+  width: fit-content;
+  max-width: 92%;
+  margin: 0 auto;
 }
 
+
 .search-active .nav-pill-container {
-  width: 100%;
+  width: 92%;
   max-width: 440px;
-  padding: 6px 12px;
-  gap: 0;
+  padding: 8px 15px;
+  gap: 4px;
 }
+
 
 
 
@@ -1236,22 +1234,24 @@ footer {
 }
 
 .nav-cart-btn {
-  background: white;
+  background: transparent;
   border: none;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.03);
   position: relative;
-  margin-left: 6px;
   cursor: pointer;
   flex-shrink: 0;
-  z-index: 10;
   transition: all 0.3s ease;
+  color: #a0a0a0;
+}
+
+.nav-cart-btn .nav-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 1.5px;
 }
 
 .search-active .nav-cart-btn {
@@ -1263,12 +1263,8 @@ footer {
 
 
 
-.nav-cart-btn svg {
-  width: 26px;
-  height: 26px;
-  stroke-width: 1.5px;
-  color: #000;
-}
+
+
 
 
 
