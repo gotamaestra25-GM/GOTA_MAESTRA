@@ -1085,17 +1085,19 @@ footer {
   backdrop-filter: blur(25px) saturate(200%);
   -webkit-backdrop-filter: blur(25px) saturate(200%);
   border-radius: 100px;
-  padding: 8px 10px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 4px;
+  justify-content: center;
+  gap: 8px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-  flex: 1;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 58px;
+  width: auto;
+  max-width: 90%;
 }
+
 
 .search-active .nav-pill-container {
   padding: 6px 8px;
@@ -1109,26 +1111,20 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   padding: 10px;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   color: #a0a0a0;
-  flex: 1;
 }
-
-.nav-item#mobileHomeBtn {
-  flex: 1.6;
-}
-
 
 .nav-item.active {
   background: #f5f5f5;
   color: #000;
   border-radius: 20px;
-  padding: 12px 20px;
+  padding: 10px 16px;
 }
+
 
 .nav-item.active .nav-label {
   display: inline-block;
