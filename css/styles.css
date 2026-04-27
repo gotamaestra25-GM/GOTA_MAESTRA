@@ -1120,6 +1120,18 @@ footer {
   padding: 10px 16px;
 }
 
+.search-active #mobileHomeBtn {
+  width: 50px;
+  padding: 10px;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.search-active #mobileHomeBtn .nav-label {
+  display: none !important;
+}
+
+
 
 .nav-item.active .nav-label {
   display: inline-block;
