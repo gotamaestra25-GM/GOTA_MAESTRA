@@ -576,9 +576,15 @@ const mobileSearchInput = document.getElementById('mobileSearchInput');
 const integratedSearchInput = document.getElementById('integratedSearchInput');
 const closeIntegratedSearch = document.getElementById('closeIntegratedSearch');
 
+let searchFocusCooldown = false;
+
 mobileSearchBtn?.addEventListener('click', () => {
   const bottomNav = document.querySelector('.mobile-bottom-nav');
   bottomNav.classList.add('search-active');
+  
+  // Activar cooldown para evitar que el scroll nativo de iPhone cierre el teclado al abrir
+  searchFocusCooldown = true;
+  setTimeout(() => searchFocusCooldown = false, 800);
   
   // Hacer scroll al catálogo solo al abrir la búsqueda
   document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -587,12 +593,12 @@ mobileSearchBtn?.addEventListener('click', () => {
   if (window.visualViewport) {
     const vv = window.visualViewport;
     const navHeight = bottomNav.offsetHeight;
-    const targetTop = vv.offsetTop + vv.height - navHeight - 15;
+    const targetTop = Math.round(vv.offsetTop + vv.height - navHeight - 15);
     bottomNav.style.top = `${targetTop}px`;
     bottomNav.style.bottom = "auto";
   }
   
-  setTimeout(() => integratedSearchInput.focus(), 100);
+  setTimeout(() => integratedSearchInput.focus(), 150);
 });
 
 function closeIntegratedSearchMode() {
@@ -743,25 +749,32 @@ toggleMobileBars(true);
 
 // Keyboard Tracking (Apple Music Style)
 if (window.visualViewport) {
+  let isTicking = false;
+  
   const handleViewportChange = () => {
-    const nav = document.querySelector('.mobile-bottom-nav');
-    if (!nav) return;
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        const nav = document.querySelector('.mobile-bottom-nav');
+        if (!nav) {
+          isTicking = false;
+          return;
+        }
 
-    if (nav.classList.contains('search-active')) {
-      const vv = window.visualViewport;
-      const navHeight = nav.offsetHeight;
-      
-      // Usar 'top' en lugar de 'bottom' para posicionar el buscador.
-      // Esto evita el vaivén (jitter) al hacer scroll.
-      // Para iPhone, nos aseguramos de usar Math.round para evitar sub-píxeles que causen saltos.
-      const targetTop = Math.round(vv.offsetTop + vv.height - navHeight - 15);
-      
-      nav.style.top = `${targetTop}px`;
-      nav.style.bottom = "auto";
-      nav.style.transition = "none";
-    } else {
-      nav.style.top = "auto";
-      nav.style.bottom = "25px";
+        if (nav.classList.contains('search-active')) {
+          const vv = window.visualViewport;
+          const navHeight = nav.offsetHeight;
+          const targetTop = Math.round(vv.offsetTop + vv.height - navHeight - 15);
+          
+          nav.style.top = `${targetTop}px`;
+          nav.style.bottom = "auto";
+          nav.style.transition = "none";
+        } else {
+          nav.style.top = "auto";
+          nav.style.bottom = "25px";
+        }
+        isTicking = false;
+      });
+      isTicking = true;
     }
   };
 
@@ -771,6 +784,8 @@ if (window.visualViewport) {
 
 // Ocultar teclado al hacer scroll o deslizar para mejor visibilidad (Solicitud Usuario)
 const hideKeyboardOnScroll = () => {
+  if (searchFocusCooldown) return; // Evitar cierre prematuro en animaciones de foco
+  
   const nav = document.querySelector('.mobile-bottom-nav');
   if (nav && nav.classList.contains('search-active')) {
     if (document.activeElement === integratedSearchInput && integratedSearchInput.value.length > 0) {

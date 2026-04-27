@@ -1143,6 +1143,10 @@ footer {
   z-index: 3000;
 }
 
+.card {
+  will-change: transform, opacity; /* Optimización para scroll fluido */
+}
+
 
 .nav-hidden {
   opacity: 0 !important;
