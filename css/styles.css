@@ -247,13 +247,15 @@ header.header-scrolled .header-container {
 
 .filtros-wrapper {
   position: sticky;
-  top: 66px; /* Ajuste para el header fijo */
-  z-index: 1000;
+  top: 76px; /* Para desktop */
+  z-index: 1100;
   padding: 10px 15px 5px 15px;
-  background: rgba(245, 240, 235, 0.8);
+  background: rgba(245, 240, 235, 0.95);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
+
 
 
 .filtros-bar {
@@ -448,16 +450,17 @@ header.header-scrolled .header-container {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
-  z-index: 2000;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 4000; /* Mucho más alto que la nav bar */
   visibility: hidden;
   opacity: 0;
-  transition: 0.25s;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 
 .modal-overlay.open {
   visibility: visible;
@@ -970,8 +973,10 @@ footer {
   }
 
   .filtros-wrapper {
-    top: 60px;
+    top: 60px !important; /* Altura del header en mobile */
+    z-index: 1500;
   }
+
 
   .acorde-nombre {
     width: 100px;
@@ -1108,9 +1113,11 @@ footer {
 
 .nav-hidden {
   opacity: 0 !important;
+  visibility: hidden !important;
   pointer-events: none !important;
   transform: translateY(100px) !important;
 }
+
 
 
 .mobile-bottom-nav .nav-container {
