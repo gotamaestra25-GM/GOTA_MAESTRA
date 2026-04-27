@@ -247,14 +247,16 @@ header.header-scrolled .header-container {
 
 .filtros-wrapper {
   position: sticky;
-  top: 76px; /* Para desktop */
+  top: 76px;
   z-index: 1100;
-  padding: 10px 15px 5px 15px;
-  background: rgba(245, 240, 235, 0.95);
+  padding: 8px 15px;
+  background: rgba(245, 240, 235, 0.92);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+  transition: all 0.3s ease;
 }
+
 
 
 
@@ -973,9 +975,11 @@ footer {
   }
 
   .filtros-wrapper {
-    top: 60px !important; /* Altura del header en mobile */
-    z-index: 1500;
+    top: 60px !important; /* Alineado al header */
+    z-index: 100; /* Menor que el header para no tapar el logo */
+    padding: 6px 10px;
   }
+
 
 
   .acorde-nombre {
@@ -1202,15 +1206,31 @@ footer {
   color: #a0a0a0;
 }
 
+.nav-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.nav-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 1.5px;
+}
+
 .nav-item.active svg {
   fill: none;
   stroke: #000;
-  transition: fill 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .nav-item.active.scrolled svg {
   fill: #000;
 }
+
 
 
 .notif-dot {
