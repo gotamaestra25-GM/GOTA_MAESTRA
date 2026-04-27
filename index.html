@@ -193,22 +193,9 @@
           </button>
         </div>
 
-        <!-- Mobile Search Overlay (Integrated) -->
-        <div class="mobile-search-overlay" id="mobileSearchOverlay">
-          <div class="search-overlay-header">
-            <input type="text" id="mobileSearchInput" placeholder="¿Qué aroma buscas hoy?">
-            <button class="close-search" id="closeMobileSearch">&times;</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </nav>
-
-
-
   <!-- Favorites Drawer/Overlay -->
   <div class="fav-overlay" id="favOverlay">
+
     <div class="fav-container">
       <div class="fav-header">
         <h3>Tus Favoritos</h3>
@@ -220,8 +207,16 @@
     </div>
   </div>
 
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
-</body>
+  <!-- Mobile Search Overlay (Moved to Root for Keyboard Stability) -->
+  <div class="mobile-search-overlay" id="mobileSearchOverlay">
+    <div class="search-overlay-header">
+      <input type="text" id="mobileSearchInput" placeholder="¿Qué aroma buscas hoy?">
+      <button class="close-search" id="closeMobileSearch">&times;</button>
+    </div>
+  </div>
 
+  <!-- JS -->
+<script src='js/data.js'></script>
+<script src='js/app.js'></script>
+</body>
 </html>
