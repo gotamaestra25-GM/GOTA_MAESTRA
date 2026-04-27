@@ -162,12 +162,16 @@ function showToast(mensaje) {
 function openCartSidebar() {
   cartSidebar.classList.add('open');
   cartOverlayEl.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  toggleMobileBars(false);
   history.pushState({ sidebar: 'cart' }, "");
 }
 
 function closeCartSidebar(isPopState = false) {
   cartSidebar.classList.remove('open');
   cartOverlayEl.classList.remove('open');
+  document.body.style.overflow = '';
+  toggleMobileBars(true);
   if (isPopState !== true && window.history.state?.sidebar === 'cart') {
     history.back();
   }
@@ -181,6 +185,7 @@ function openModal(product) {
   renderModalContent();
   modalOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+  toggleMobileBars(false);
   
   // Siempre resetear el scroll al inicio (arriba)
   const container = document.querySelector('.modal-container');
@@ -194,6 +199,7 @@ function closeModal(isPopState = false) {
   modalOverlay.classList.remove('open');
   currentModalProduct = null;
   document.body.style.overflow = '';
+  toggleMobileBars(true);
   
   // Si se cerró manualmente (no por botón atrás), quitar el estado del historial
   if (isPopState !== true && window.history.state?.modal === 'product') {
@@ -491,6 +497,17 @@ function closeMobile() {
   if (mobileNav) mobileNav.style.display = 'none';
 }
 
+function toggleMobileBars(show) {
+  const bars = document.querySelectorAll('.mobile-bottom-nav, .mobile-search-overlay');
+  bars.forEach(bar => {
+    if (show) {
+      bar.classList.remove('nav-hidden');
+    } else {
+      bar.classList.add('nav-hidden');
+    }
+  });
+}
+
 // ========== EVENT LISTENERS ==========
 document.querySelectorAll('.filtro-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -598,6 +615,7 @@ mobileFavBtn?.addEventListener('click', () => {
   favOverlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
   setActiveNavItem('mobileFavBtn');
+  toggleMobileBars(false);
 });
 
 closeFavBtn?.addEventListener('click', closeFavOverlay);
@@ -623,7 +641,9 @@ function closeFavOverlay() {
   favOverlay.style.display = 'none';
   document.body.style.overflow = '';
   setActiveNavItem('mobileHomeBtn');
+  toggleMobileBars(true);
 }
+
 
 function setActiveNavItem(id) {
   document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
