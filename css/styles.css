@@ -1125,7 +1125,7 @@ footer {
 
 /* ========== MOBILE BOTTOM NAVIGATION (LIQUID GLASS) ========== */
 .mobile-bottom-nav {
-  display: flex; /* Cambiado a flex por defecto */
+  display: flex;
   position: fixed;
   bottom: 25px;
   left: 0;
@@ -1133,7 +1133,14 @@ footer {
   z-index: 2500;
   width: 100%;
   pointer-events: none;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s ease, opacity 0.4s ease;
+  will-change: bottom, top, transform;
+}
+
+.search-active.mobile-bottom-nav {
+  transition: none !important; /* Vital para evitar jitter al hacer scroll */
+  pointer-events: auto;
+  z-index: 3000;
 }
 
 

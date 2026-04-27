@@ -579,12 +579,27 @@ const closeIntegratedSearch = document.getElementById('closeIntegratedSearch');
 mobileSearchBtn?.addEventListener('click', () => {
   const bottomNav = document.querySelector('.mobile-bottom-nav');
   bottomNav.classList.add('search-active');
+  
+  // Hacer scroll al catálogo solo al abrir la búsqueda
+  document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  
+  // Forzar una actualización de posición inmediata antes del foco
+  if (window.visualViewport) {
+    const vv = window.visualViewport;
+    const navHeight = bottomNav.offsetHeight;
+    const targetTop = vv.offsetTop + vv.height - navHeight - 15;
+    bottomNav.style.top = `${targetTop}px`;
+    bottomNav.style.bottom = "auto";
+  }
+  
   setTimeout(() => integratedSearchInput.focus(), 100);
 });
 
 function closeIntegratedSearchMode() {
   const bottomNav = document.querySelector('.mobile-bottom-nav');
   bottomNav.classList.remove('search-active');
+  bottomNav.style.top = "auto";
+  bottomNav.style.bottom = "25px";
   integratedSearchInput.value = '';
   searchInput.value = '';
   renderProductos();
@@ -596,9 +611,7 @@ integratedSearchInput?.addEventListener('input', (e) => {
   const term = e.target.value.toLowerCase().trim();
   searchInput.value = term;
   renderProductos();
-  if (term.length > 0) {
-    document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  // Eliminamos el scroll automático al escribir para no interrumpir al usuario
 });
 
 
@@ -735,20 +748,19 @@ if (window.visualViewport) {
     if (!nav) return;
 
     if (nav.classList.contains('search-active')) {
-      const height = window.visualViewport.height;
-      const fullHeight = window.innerHeight;
-      const keyboardHeight = fullHeight - height;
+      const vv = window.visualViewport;
+      const navHeight = nav.offsetHeight;
       
-      if (keyboardHeight > 50) {
-        // El teclado está abierto
-        nav.style.bottom = `${keyboardHeight + 5}px`;
-        nav.style.transition = "none"; // Instantáneo con el teclado
-      } else {
-        // Teclado cerrado
-        nav.style.bottom = "25px";
-        nav.style.transition = "bottom 0.3s ease";
-      }
+      // Usar 'top' en lugar de 'bottom' para posicionar el buscador.
+      // Esto evita el vaivén (jitter) al hacer scroll porque 'top' y 'offsetTop' 
+      // se mueven en la misma dirección.
+      const targetTop = vv.offsetTop + vv.height - navHeight - 15;
+      
+      nav.style.top = `${targetTop}px`;
+      nav.style.bottom = "auto";
+      nav.style.transition = "none";
     } else {
+      nav.style.top = "auto";
       nav.style.bottom = "25px";
     }
   };
