@@ -572,6 +572,11 @@ closeMobileSearch?.addEventListener('click', () => {
 mobileSearchInput?.addEventListener('input', (e) => {
   const term = e.target.value.toLowerCase().trim();
   const resultsDiv = document.getElementById('mobileSearchResults');
+  
+  // También filtrar la grid principal en tiempo real
+  searchInput.value = term;
+  renderProductos();
+
   if (!term) {
     resultsDiv.innerHTML = '';
     return;
@@ -580,16 +585,27 @@ mobileSearchInput?.addEventListener('input', (e) => {
   const matches = allProducts.filter(p => p.nombre.toLowerCase().includes(term)).slice(0, 5);
   let html = '';
   matches.forEach(m => {
-    html += `<div style="padding:15px; border-bottom:1px solid #eee; display:flex; align-items:center; gap:10px;" onclick="openModalById(${m.id}); closeMobileSearchOverlay();">
-      <span>🔍</span>
+    html += `<div style="padding:15px; border-bottom:1px solid rgba(0,0,0,0.05); display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="selectSearchMatch('${escapeHtml(m.nombre)}')">
+      <span style="font-size:1.1rem; opacity:0.5;">🔍</span>
       <div>
-        <div style="font-weight:600;">${m.nombre}</div>
-        <div style="font-size:0.75rem; color:#666;">${m.genero}</div>
+        <div style="font-weight:600; font-size:0.9rem;">${m.nombre}</div>
+        <div style="font-size:0.7rem; color:#888; text-transform:uppercase; letter-spacing:1px;">${m.genero === 'caballero' ? 'Caballero' : 'Dama'}</div>
       </div>
     </div>`;
   });
   resultsDiv.innerHTML = html;
 });
+
+function selectSearchMatch(nombre) {
+  searchInput.value = nombre;
+  mobileSearchInput.value = nombre;
+  renderProductos();
+  closeMobileSearchOverlay();
+  
+  // Scroll suave al catálogo para ver los resultados
+  document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
+}
+
 
 function closeMobileSearchOverlay() {
   mobileSearchOverlay.style.display = 'none';
@@ -638,14 +654,32 @@ function setActiveNavItem(id) {
 }
 
 // ========== ANIMATIONS AND PREMIUM EFFECTS ==========
+let lastScrollY = window.scrollY;
+
 window.addEventListener('scroll', () => {
   const header = document.querySelector('header');
-  if (window.scrollY > 50) {
+  const currentScrollY = window.scrollY;
+  
+  // Header scrolled effect
+  if (currentScrollY > 50) {
     header.classList.add('header-scrolled');
   } else {
     header.classList.remove('header-scrolled');
   }
+
+  // Mobile Nav Label Hide on Scroll
+  const homeBtn = document.getElementById('mobileHomeBtn');
+  if (homeBtn && homeBtn.classList.contains('active')) {
+    if (currentScrollY > 100) {
+      homeBtn.classList.add('scrolled');
+    } else {
+      homeBtn.classList.remove('scrolled');
+    }
+  }
+
+  lastScrollY = currentScrollY;
 });
+
 
 const observerOptions = {
   root: null,

@@ -1095,6 +1095,17 @@ footer {
   font-weight: 600;
   font-size: 0.85rem;
   margin-left: 4px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.nav-item.active.scrolled .nav-label {
+  display: none;
+}
+
+.nav-item.active.scrolled {
+  padding: 12px;
 }
 
 .nav-label {
@@ -1134,24 +1145,26 @@ footer {
 .nav-cart-btn {
   background: white;
   border: none;
-  width: 64px;
-  height: 64px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(0, 0, 0, 0.03);
   position: relative;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .nav-cart-btn svg {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   stroke-width: 1.5px;
   color: #000;
 }
+
 
 
 .cart-badge {
@@ -1171,31 +1184,31 @@ footer {
   border: 2px solid white;
 }
 
-/* MOBILE SEARCH FLOATING CAPSULE */
+/* MOBILE SEARCH FLOATING CAPSULE (BOTTOM) */
 .mobile-search-overlay {
   position: fixed;
-  top: 20px;
+  bottom: 100px;
   left: 15px;
   right: 15px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(25px) saturate(200%);
-  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(30px) saturate(210%);
+  -webkit-backdrop-filter: blur(30px) saturate(210%);
   z-index: 2200;
   padding: 10px;
   display: none;
   flex-direction: column;
   border-radius: 28px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  max-height: 80vh;
-  animation: floatDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-height: 60vh;
+  animation: floatUpAnim 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-
-@keyframes floatDown {
-  from { transform: translateY(-100%); opacity: 0; }
+@keyframes floatUpAnim {
+  from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+
 
 .search-overlay-header {
   display: flex;
