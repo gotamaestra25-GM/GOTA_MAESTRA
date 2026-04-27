@@ -728,4 +728,26 @@ window.addEventListener('popstate', (e) => {
 
 // Activate for initial load
 observeCards();
-toggleMobileBars(true);
+toggleMobileBars(true);
+
+// Keyboard Tracking (Apple Music Style)
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', () => {
+    const overlay = document.getElementById('mobileSearchOverlay');
+    if (overlay && overlay.style.display === 'flex') {
+      const height = window.visualViewport.height;
+      const fullHeight = window.innerHeight;
+      const keyboardHeight = fullHeight - height;
+      
+      // Ajustar posición según el teclado
+      if (keyboardHeight > 100) {
+        overlay.style.bottom = `${keyboardHeight + 10}px`;
+        overlay.style.borderRadius = "20px"; // Más cuadrado cuando está con el teclado
+      } else {
+        overlay.style.bottom = "25px";
+        overlay.style.borderRadius = "100px";
+      }
+    }
+  });
+}
+
