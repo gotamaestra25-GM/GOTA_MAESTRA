@@ -728,3 +728,4 @@ window.addEventListener('popstate', (e) => {
 
 // Activate for initial load
 observeCards();
+toggleMobileBars(true);

@@ -1105,16 +1105,17 @@ footer {
 
 /* ========== MOBILE BOTTOM NAVIGATION (LIQUID GLASS) ========== */
 .mobile-bottom-nav {
-  display: none;
+  display: flex; /* Cambiado a flex por defecto */
   position: fixed;
   bottom: 25px;
   left: 0;
   right: 0;
-  z-index: 2100;
+  z-index: 2500;
   width: 100%;
   pointer-events: none;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 
 .nav-hidden {
   opacity: 0 !important;
@@ -1459,8 +1460,8 @@ footer {
 }
 
 /* RESPONSIVE ACTIVATION */
-@media (max-width: 780px) {
+@media (min-width: 781px) {
   .mobile-bottom-nav {
-    display: block;
+    display: none !important;
   }
-}
+}
