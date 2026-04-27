@@ -571,40 +571,17 @@ closeMobileSearch?.addEventListener('click', () => {
 
 mobileSearchInput?.addEventListener('input', (e) => {
   const term = e.target.value.toLowerCase().trim();
-  const resultsDiv = document.getElementById('mobileSearchResults');
   
-  // También filtrar la grid principal en tiempo real
+  // Filtrar la grid principal directamente
   searchInput.value = term;
   renderProductos();
 
-  if (!term) {
-    resultsDiv.innerHTML = '';
-    return;
+  // No mostramos lista de nombres, solo filtramos el fondo
+  if (term.length > 0) {
+    document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-
-  const matches = allProducts.filter(p => p.nombre.toLowerCase().includes(term)).slice(0, 5);
-  let html = '';
-  matches.forEach(m => {
-    html += `<div style="padding:15px; border-bottom:1px solid rgba(0,0,0,0.05); display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="selectSearchMatch('${escapeHtml(m.nombre)}')">
-      <span style="font-size:1.1rem; opacity:0.5;">🔍</span>
-      <div>
-        <div style="font-weight:600; font-size:0.9rem;">${m.nombre}</div>
-        <div style="font-size:0.7rem; color:#888; text-transform:uppercase; letter-spacing:1px;">${m.genero === 'caballero' ? 'Caballero' : 'Dama'}</div>
-      </div>
-    </div>`;
-  });
-  resultsDiv.innerHTML = html;
 });
 
-function selectSearchMatch(nombre) {
-  searchInput.value = nombre;
-  mobileSearchInput.value = nombre;
-  renderProductos();
-  closeMobileSearchOverlay();
-  
-  // Scroll suave al catálogo para ver los resultados
-  document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
-}
 
 
 function closeMobileSearchOverlay() {
