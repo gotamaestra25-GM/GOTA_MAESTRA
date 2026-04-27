@@ -574,17 +574,23 @@ const closeMobileSearch = document.getElementById('closeMobileSearch');
 const mobileSearchInput = document.getElementById('mobileSearchInput');
 
 mobileSearchBtn?.addEventListener('click', () => {
+  const bottomNav = document.querySelector('.mobile-bottom-nav');
+  bottomNav.classList.add('search-active');
   mobileSearchOverlay.style.display = 'flex';
-  setTimeout(() => mobileSearchInput.focus(), 300); // Pequeño delay para asegurar que la animación comenzó
-  document.body.style.overflow = 'hidden';
-  setActiveNavItem('mobileSearchBtn');
+  setTimeout(() => mobileSearchInput.focus(), 300);
 });
 
-closeMobileSearch?.addEventListener('click', () => {
+function closeMobileSearchOverlay() {
+  const bottomNav = document.querySelector('.mobile-bottom-nav');
+  bottomNav.classList.remove('search-active');
   mobileSearchOverlay.style.display = 'none';
-  document.body.style.overflow = '';
-  setActiveNavItem('mobileHomeBtn');
-});
+  mobileSearchInput.value = '';
+  searchInput.value = '';
+  renderProductos();
+}
+
+closeMobileSearch?.addEventListener('click', closeMobileSearchOverlay);
+
 
 mobileSearchInput?.addEventListener('input', (e) => {
   const term = e.target.value.toLowerCase().trim();
@@ -601,11 +607,7 @@ mobileSearchInput?.addEventListener('input', (e) => {
 
 
 
-function closeMobileSearchOverlay() {
-  mobileSearchOverlay.style.display = 'none';
-  document.body.style.overflow = '';
-  setActiveNavItem('mobileHomeBtn');
-}
+
 
 const mobileFavBtn = document.getElementById('mobileFavBtn');
 const favOverlay = document.getElementById('favOverlay');

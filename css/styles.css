@@ -1059,13 +1059,17 @@ footer {
   right: 0;
   z-index: 2100;
   padding: 0 20px;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mobile-bottom-nav.nav-hidden {
   transform: translateY(120px);
   opacity: 0;
   pointer-events: none;
+}
+
+.mobile-bottom-nav.search-active {
+  padding: 0 15px;
 }
 
 .mobile-bottom-nav .nav-container {
@@ -1087,7 +1091,14 @@ footer {
   gap: 4px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.search-active .nav-pill-container {
+  padding: 6px 8px;
+}
+
 
 .nav-item {
   background: transparent;
@@ -1204,39 +1215,62 @@ footer {
   border: 2px solid white;
 }
 
-/* MOBILE SEARCH FLOATING BAR (BOTTOM) */
+/* APPLE MUSIC STYLE SEARCH */
 .mobile-search-overlay {
-  position: fixed;
-  bottom: 105px;
-  left: 20px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(25px) saturate(210%);
-  -webkit-backdrop-filter: blur(25px) saturate(210%);
-  z-index: 2050;
-  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+  left: 60px; /* Al lado de la casita */
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 2101;
   display: none;
-  flex-direction: column;
-  border-radius: 24px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  height: 64px;
-  transition: transform 0.4s ease, opacity 0.3s ease;
-  animation: floatUpAnim 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  align-items: center;
+  padding-right: 8px;
+  animation: fadeIn 0.3s ease;
 }
 
-.mobile-search-overlay.nav-hidden {
-  transform: translateY(50px);
-  opacity: 0;
-  pointer-events: none;
+.search-active .nav-item:not(#mobileHomeBtn) {
+  display: none;
 }
 
-
-
-@keyframes floatUpAnim {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.search-active .nav-cart-btn {
+  display: none;
 }
+
+.search-overlay-header {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-overlay-header input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.06);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 100px;
+  font-size: 0.95rem;
+  outline: none;
+  color: var(--texto);
+  width: 100%;
+}
+
+.close-search {
+  background: rgba(0, 0, 0, 0.06);
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: var(--texto-suave);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 
 
 .search-overlay-header {

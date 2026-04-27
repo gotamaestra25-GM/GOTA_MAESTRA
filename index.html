@@ -176,6 +176,14 @@
             <span class="notif-dot" id="notifDot"></span>
           </span>
         </button>
+
+        <!-- Mobile Search Overlay (Integrated) -->
+        <div class="mobile-search-overlay" id="mobileSearchOverlay">
+          <div class="search-overlay-header">
+            <input type="text" id="mobileSearchInput" placeholder="¿Qué aroma buscas hoy?">
+            <button class="close-search" id="closeMobileSearch">&times;</button>
+          </div>
+        </div>
       </div>
       <button class="nav-cart-btn" id="mobileCartBtn" onclick="openCartSidebar()">
         <span class="nav-icon">
@@ -190,13 +198,7 @@
     </div>
   </nav>
 
-  <!-- Mobile Search Overlay -->
-  <div class="mobile-search-overlay" id="mobileSearchOverlay">
-    <div class="search-overlay-header">
-      <input type="text" id="mobileSearchInput" placeholder="¿Qué aroma buscas hoy?">
-      <button class="close-search" id="closeMobileSearch">&times;</button>
-    </div>
-  </div>
+
 
   <!-- Favorites Drawer/Overlay -->
   <div class="fav-overlay" id="favOverlay">
