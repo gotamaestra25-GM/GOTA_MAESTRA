@@ -573,37 +573,35 @@ const mobileSearchOverlay = document.getElementById('mobileSearchOverlay');
 const closeMobileSearch = document.getElementById('closeMobileSearch');
 const mobileSearchInput = document.getElementById('mobileSearchInput');
 
+const integratedSearchInput = document.getElementById('integratedSearchInput');
+const closeIntegratedSearch = document.getElementById('closeIntegratedSearch');
+
 mobileSearchBtn?.addEventListener('click', () => {
   const bottomNav = document.querySelector('.mobile-bottom-nav');
   bottomNav.classList.add('search-active');
-  mobileSearchOverlay.style.display = 'flex';
-  setTimeout(() => mobileSearchInput.focus(), 300);
+  setTimeout(() => integratedSearchInput.focus(), 100);
 });
 
-function closeMobileSearchOverlay() {
+function closeIntegratedSearchMode() {
   const bottomNav = document.querySelector('.mobile-bottom-nav');
   bottomNav.classList.remove('search-active');
-  mobileSearchOverlay.style.display = 'none';
-  mobileSearchInput.value = '';
+  integratedSearchInput.value = '';
   searchInput.value = '';
   renderProductos();
 }
 
-closeMobileSearch?.addEventListener('click', closeMobileSearchOverlay);
+closeIntegratedSearch?.addEventListener('click', closeIntegratedSearchMode);
 
-
-mobileSearchInput?.addEventListener('input', (e) => {
+integratedSearchInput?.addEventListener('input', (e) => {
   const term = e.target.value.toLowerCase().trim();
-  
-  // Filtrar la grid principal directamente
   searchInput.value = term;
   renderProductos();
-
-  // No mostramos lista de nombres, solo filtramos el fondo
   if (term.length > 0) {
     document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 });
+
+
 
 
 
@@ -733,19 +731,16 @@ toggleMobileBars(true);
 // Keyboard Tracking (Apple Music Style)
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', () => {
-    const overlay = document.getElementById('mobileSearchOverlay');
-    if (overlay && overlay.style.display === 'flex') {
+    const nav = document.querySelector('.mobile-bottom-nav');
+    if (nav && nav.classList.contains('search-active')) {
       const height = window.visualViewport.height;
       const fullHeight = window.innerHeight;
       const keyboardHeight = fullHeight - height;
       
-      // Ajustar posición según el teclado
       if (keyboardHeight > 100) {
-        overlay.style.bottom = `${keyboardHeight + 10}px`;
-        overlay.style.borderRadius = "20px"; // Más cuadrado cuando está con el teclado
+        nav.style.bottom = `${keyboardHeight + 10}px`;
       } else {
-        overlay.style.bottom = "25px";
-        overlay.style.borderRadius = "100px";
+        nav.style.bottom = "25px";
       }
     }
   });
