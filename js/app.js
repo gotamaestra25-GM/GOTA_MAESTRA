@@ -730,19 +730,30 @@ toggleMobileBars(true);
 
 // Keyboard Tracking (Apple Music Style)
 if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', () => {
+  const handleViewportChange = () => {
     const nav = document.querySelector('.mobile-bottom-nav');
-    if (nav && nav.classList.contains('search-active')) {
+    if (!nav) return;
+
+    if (nav.classList.contains('search-active')) {
       const height = window.visualViewport.height;
       const fullHeight = window.innerHeight;
       const keyboardHeight = fullHeight - height;
       
-      if (keyboardHeight > 100) {
-        nav.style.bottom = `${keyboardHeight + 10}px`;
+      if (keyboardHeight > 50) {
+        // El teclado está abierto
+        nav.style.bottom = `${keyboardHeight + 5}px`;
+        nav.style.transition = "none"; // Instantáneo con el teclado
       } else {
+        // Teclado cerrado
         nav.style.bottom = "25px";
+        nav.style.transition = "bottom 0.3s ease";
       }
+    } else {
+      nav.style.bottom = "25px";
     }
-  });
+  };
+
+  window.visualViewport.addEventListener('resize', handleViewportChange);
+  window.visualViewport.addEventListener('scroll', handleViewportChange);
 }
 
