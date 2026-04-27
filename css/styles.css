@@ -247,15 +247,15 @@ header.header-scrolled .header-container {
 
 .filtros-wrapper {
   position: sticky;
-  top: 76px;
-  z-index: 1100;
-  padding: 8px 15px;
-  background: rgba(245, 240, 235, 0.92);
+  top: 76px; /* Para desktop */
+  z-index: 100; /* Debajo del header para evitar solapamientos */
+  padding: 10px 15px 5px 15px;
+  background: rgba(245, 240, 235, 0.95);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(0,0,0,0.03);
-  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
+
 
 
 
@@ -975,10 +975,11 @@ footer {
   }
 
   .filtros-wrapper {
-    top: 60px !important; /* Alineado al header */
-    z-index: 100; /* Menor que el header para no tapar el logo */
-    padding: 6px 10px;
+    top: 60px !important; 
+    z-index: 100 !important;
+    padding: 10px 15px;
   }
+
 
 
 
