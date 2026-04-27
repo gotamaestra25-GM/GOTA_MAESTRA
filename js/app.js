@@ -587,7 +587,6 @@ mobileSearchBtn?.addEventListener('click', () => {
   if (window.visualViewport) {
     const vv = window.visualViewport;
     const navHeight = bottomNav.offsetHeight;
-    bottomNav.style.position = 'absolute';
     const targetTop = vv.offsetTop + vv.height - navHeight - 15;
     bottomNav.style.top = `${targetTop}px`;
     bottomNav.style.bottom = "auto";
@@ -599,7 +598,6 @@ mobileSearchBtn?.addEventListener('click', () => {
 function closeIntegratedSearchMode() {
   const bottomNav = document.querySelector('.mobile-bottom-nav');
   bottomNav.classList.remove('search-active');
-  bottomNav.style.position = 'fixed';
   bottomNav.style.top = "auto";
   bottomNav.style.bottom = "25px";
   integratedSearchInput.value = '';
@@ -753,17 +751,15 @@ if (window.visualViewport) {
       const vv = window.visualViewport;
       const navHeight = nav.offsetHeight;
       
-      // En iOS Safari, 'position: fixed' tiene errores graves con el teclado virtual.
-      // La solución de nivel experto es usar 'position: absolute' y sincronizarlo
-      // manualmente con el offsetTop del visualViewport.
-      nav.style.position = 'absolute';
-      const targetTop = vv.offsetTop + vv.height - navHeight - 15;
+      // Usar 'top' en lugar de 'bottom' para posicionar el buscador.
+      // Esto evita el vaivén (jitter) al hacer scroll.
+      // Para iPhone, nos aseguramos de usar Math.round para evitar sub-píxeles que causen saltos.
+      const targetTop = Math.round(vv.offsetTop + vv.height - navHeight - 15);
       
       nav.style.top = `${targetTop}px`;
       nav.style.bottom = "auto";
       nav.style.transition = "none";
     } else {
-      nav.style.position = 'fixed';
       nav.style.top = "auto";
       nav.style.bottom = "25px";
     }
@@ -772,4 +768,17 @@ if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', handleViewportChange);
   window.visualViewport.addEventListener('scroll', handleViewportChange);
 }
+
+// Ocultar teclado al hacer scroll o deslizar para mejor visibilidad (Solicitud Usuario)
+const hideKeyboardOnScroll = () => {
+  const nav = document.querySelector('.mobile-bottom-nav');
+  if (nav && nav.classList.contains('search-active')) {
+    if (document.activeElement === integratedSearchInput && integratedSearchInput.value.length > 0) {
+      integratedSearchInput.blur();
+    }
+  }
+};
+
+window.addEventListener('scroll', hideKeyboardOnScroll, { passive: true });
+window.addEventListener('touchmove', hideKeyboardOnScroll, { passive: true });
 
