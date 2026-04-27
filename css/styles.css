@@ -1114,31 +1114,53 @@ footer {
 
 
 .nav-pill-container {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(25px) saturate(210%);
-  -webkit-backdrop-filter: blur(25px) saturate(210%);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(30px) saturate(210%);
+  -webkit-backdrop-filter: blur(30px) saturate(210%);
   border-radius: 100px;
   padding: 8px 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  justify-content: space-between;
   border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 54px;
-  width: fit-content;
-  max-width: 92%;
+  min-height: 58px;
+  width: 92%;
+  max-width: 480px;
   margin: 0 auto;
+  position: relative;
 }
 
+.pill-left, .pill-right {
+  width: 80px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.pill-right {
+  justify-content: flex-end;
+}
+
+.pill-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-active .pill-center,
+.search-active .pill-left,
+.search-active .pill-right {
+  display: none;
+}
 
 .search-active .nav-pill-container {
-  width: 92%;
-  max-width: 440px;
   padding: 8px 15px;
-  gap: 4px;
 }
+
 
 
 
@@ -1233,7 +1255,7 @@ footer {
   display: none;
 }
 
-.nav-cart-btn {
+.nav-cart-btn-pill {
   background: transparent;
   border: none;
   width: 44px;
@@ -1248,15 +1270,12 @@ footer {
   color: #a0a0a0;
 }
 
-.nav-cart-btn .nav-icon svg {
+.nav-cart-btn-pill .nav-icon svg {
   width: 24px;
   height: 24px;
   stroke-width: 1.5px;
 }
 
-.search-active .nav-cart-btn {
-  display: none;
-}
 
 
 
