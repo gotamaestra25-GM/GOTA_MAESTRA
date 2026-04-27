@@ -1076,9 +1076,14 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
   pointer-events: auto;
+  min-height: 60px;
 }
+
 
 .nav-pill-container {
   background: rgba(255, 255, 255, 0.75);
@@ -1191,10 +1196,14 @@ footer {
   justify-content: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(0, 0, 0, 0.03);
-  position: relative;
+  position: absolute;
+  right: 0;
   cursor: pointer;
   flex-shrink: 0;
+  z-index: 5;
 }
+
+
 
 .nav-cart-btn svg {
   width: 26px;
