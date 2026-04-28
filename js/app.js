@@ -195,7 +195,7 @@ function closeModal(isPopState = false) {
 
 // Función para obtener acordes (simplificada - para completar)
 function getAcordesConIntensidad(nombre) {
-  if (window.acordesData) {
+  if (typeof acordesData !== 'undefined') {
     // 1. Búsqueda exacta
     if (acordesData[nombre]) {
       return acordesData[nombre].map(a => ({ nombre: a[0], intensidad: a[1], color: a[2] }));
@@ -209,8 +209,13 @@ function getAcordesConIntensidad(nombre) {
       }
     }
   }
-  // Si no hay datos, devolvemos vacío para no inventar repetidos
-  return [];
+  // Fallback si de verdad no encuentra nada en la tabla (no debería pasar con la base completa)
+  return [
+    { nombre: "amaderado", intensidad: 75, color: "#7B4F2E" },
+    { nombre: "cálido especiado", intensidad: 70, color: "#E07045" },
+    { nombre: "almizclado", intensidad: 65, color: "#D5B8A0" },
+    { nombre: "cítrico", intensidad: 60, color: "#F4D03F" }
+  ];
 }
 
 function renderModalContent() {
