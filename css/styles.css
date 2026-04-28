@@ -247,13 +247,15 @@ header.header-scrolled .header-container {
 
 .filtros-wrapper {
   position: sticky;
-  top: 76px; /* Para desktop */
-  z-index: 100; /* Debajo del header para evitar solapamientos */
+  top: 76px;
+  /* Para desktop */
+  z-index: 100;
+  /* Debajo del header para evitar solapamientos */
   padding: 10px 15px 5px 15px;
   background: rgba(245, 240, 235, 0.95);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 
@@ -454,7 +456,8 @@ header.header-scrolled .header-container {
   inset: 0;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
-  z-index: 4000; /* Mucho más alto que la nav bar */
+  z-index: 4000;
+  /* Mucho más alto que la nav bar */
   visibility: hidden;
   opacity: 0;
   transition: all 0.3s ease;
@@ -980,7 +983,7 @@ footer {
     flex: 1;
     margin-left: 10px;
   }
-  
+
   .nav-search-box.active {
     display: flex;
     align-items: center;
@@ -995,7 +998,7 @@ footer {
   }
 
   .filtros-wrapper {
-    top: 60px !important; 
+    top: 60px !important;
     z-index: 100 !important;
     padding: 10px 15px;
   }
@@ -1138,13 +1141,15 @@ footer {
 }
 
 .search-active.mobile-bottom-nav {
-  transition: none !important; /* Vital para evitar jitter al hacer scroll */
+  transition: none !important;
+  /* Vital para evitar jitter al hacer scroll */
   pointer-events: auto;
   z-index: 3000;
 }
 
 .card {
-  will-change: transform, opacity; /* Optimización para scroll fluido */
+  will-change: transform, opacity;
+  /* Optimización para scroll fluido */
 }
 
 
@@ -1197,8 +1202,10 @@ footer {
   position: relative;
 }
 
-.pill-left, .pill-right {
-  width: 44px; /* Simetría perfecta para iconos solos */
+.pill-left,
+.pill-right {
+  width: 44px;
+  /* Simetría perfecta para iconos solos */
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -1245,7 +1252,8 @@ footer {
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #000 !important; /* Forzado a negro para visibilidad total */
+  color: #000 !important;
+  /* Forzado a negro para visibilidad total */
 }
 
 .nav-icon {
@@ -1261,7 +1269,8 @@ footer {
   width: 24px !important;
   height: 24px !important;
   display: block !important;
-  stroke: #000 !important; /* Siempre negro */
+  stroke: #000 !important;
+  /* Siempre negro */
   stroke-width: 1.8px;
 }
 
@@ -1343,7 +1352,8 @@ footer {
 .mobile-search-overlay {
   display: none;
   position: fixed;
-  bottom: 25px; /* De vuelta abajo como Apple Music */
+  bottom: 25px;
+  /* De vuelta abajo como Apple Music */
   left: 50%;
   transform: translateX(-50%);
   width: 92%;
@@ -1354,16 +1364,25 @@ footer {
   -webkit-backdrop-filter: blur(30px);
   border-radius: 100px;
   padding: 0 15px;
-  z-index: 5000; /* Siempre por encima */
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
+  z-index: 5000;
+  /* Siempre por encima */
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
   align-items: center;
-  transition: bottom 0.1s ease-out; /* Transición suave para el teclado */
+  transition: bottom 0.1s ease-out;
+  /* Transición suave para el teclado */
 }
 
 
 @keyframes slideInDown {
-  from { transform: translate(-50%, -100%); opacity: 0; }
-  to { transform: translate(-50%, 0); opacity: 1; }
+  from {
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
 }
 
 
@@ -1382,8 +1401,15 @@ footer {
 }
 
 @keyframes slideInRight {
-  from { transform: translateX(20px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .search-active .pill-left {
@@ -1554,4 +1580,57 @@ footer {
   .mobile-bottom-nav {
     display: none !important;
   }
-}
+}
+
+/* ====== MEJORAS DE BÚSQUEDA FLUIDA ====== */
+
+/* Evitar que el scroll del header interfiera con la búsqueda */
+.search-active .filtros-wrapper {
+  position: relative;
+  top: 0 !important;
+  z-index: 100;
+}
+
+/* Mejorar la transición del modo búsqueda */
+.mobile-bottom-nav.search-active {
+  transition: none !important;
+}
+
+/* Asegurar que el contenedor de resultados no tenga scroll extraño */
+.productos-grid {
+  min-height: 300px;
+}
+
+/* Mejorar el mensaje de "no resultados" */
+.no-results-message {
+  animation: fadeInUp 0.4s ease;
+}
+
+/* Prevenir rebotes en iOS */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mejorar input de búsqueda */
+#integratedSearchInput,
+#searchInput {
+  transition: all 0.2s ease;
+}
+
+#integratedSearchInput:focus,
+#searchInput:focus {
+  outline: none;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Asegurar que el scroll en el catálogo sea suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Para dispositivos que soporten scroll-behavior */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
