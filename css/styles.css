@@ -1584,6 +1584,38 @@ footer {
 
 /* ====== MEJORAS DE BÚSQUEDA FLUIDA ====== */
 
+body.search-mode-active header.header-container,
+body.search-mode-active .hero {
+  display: none !important;
+}
+
+body.search-mode-active .mobile-bottom-nav.search-active {
+  top: 0 !important;
+  bottom: auto !important;
+  border-radius: 0 !important;
+  padding-top: max(env(safe-area-inset-top), 10px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  transform: none !important;
+}
+
+body.search-mode-active .mobile-bottom-nav.search-active .nav-pill-container {
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 10px 15px !important;
+}
+
+body.search-mode-active .filtros-wrapper {
+  margin-top: 70px !important; /* Espacio para la barra de búsqueda superior */
+  position: relative !important;
+  top: 0 !important;
+  z-index: 100 !important;
+}
+
 /* Evitar que el scroll del header interfiera con la búsqueda */
 .search-active .filtros-wrapper {
   position: relative;
@@ -1593,12 +1625,12 @@ footer {
 
 /* Mejorar la transición del modo búsqueda */
 .mobile-bottom-nav.search-active {
-  transition: none !important;
+  transition: opacity 0.2s ease !important;
 }
 
 /* Asegurar que el contenedor de resultados no tenga scroll extraño */
 .productos-grid {
-  min-height: 300px;
+  min-height: 50vh;
 }
 
 /* Mejorar el mensaje de "no resultados" */

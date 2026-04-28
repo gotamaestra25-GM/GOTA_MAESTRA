@@ -506,17 +506,13 @@ function hideKeyboard() {
   }
 }
 
-// Función para manejar el scroll sin interferir con la búsqueda
-let isKeyboardVisible = false;
-let lastScrollPosition = 0;
-
-// Detectar cuando el teclado está visible (útil para iOS)
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', () => {
-    const viewportHeight = window.visualViewport.height;
-    const windowHeight = window.innerHeight;
-    isKeyboardVisible = viewportHeight < windowHeight - 100;
-  });
+// Ocultar teclado al tocar los resultados (estilo Google/Facebook)
+if (typeof productosGrid !== 'undefined' && productosGrid) {
+  productosGrid.addEventListener('touchstart', () => {
+    if (document.body.classList.contains('search-mode-active')) {
+      hideKeyboard();
+    }
+  }, { passive: true });
 }
 
 // Manejar el focus en el input de búsqueda
@@ -579,25 +575,23 @@ function setupSearchHandlers() {
 function openMobileSearch() {
   const bottomNav = document.querySelector('.mobile-bottom-nav');
   const integratedSearchInput = document.getElementById('integratedSearchInput');
-  const filtrosWrapper = document.querySelector('.filtros-wrapper');
 
   if (bottomNav) {
     bottomNav.classList.add('search-active');
   }
 
-  // Scroll SOLO al wrapper de filtros, no al header
-  if (filtrosWrapper) {
-    setTimeout(() => {
-      filtrosWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 50);
-  }
+  // Activar modo búsqueda (oculta header y hero, fija la barra arriba)
+  document.body.classList.add('search-mode-active');
+  
+  // Scrollear al inicio inmediatamente
+  window.scrollTo({ top: 0, behavior: 'instant' });
 
   // Focus con pequeño delay para asegurar que la UI esté lista
   setTimeout(() => {
     if (integratedSearchInput) {
       integratedSearchInput.focus();
     }
-  }, 150);
+  }, 50);
 }
 
 // Función mejorada para cerrar el modo de búsqueda
@@ -611,6 +605,9 @@ function closeIntegratedSearchMode() {
     bottomNav.style.bottom = "25px";
   }
 
+  // Desactivar modo búsqueda
+  document.body.classList.remove('search-mode-active');
+
   if (integratedSearchInput) {
     integratedSearchInput.value = '';
   }
@@ -620,26 +617,13 @@ function closeIntegratedSearchMode() {
   }
 
   // Limpiar el debounce
-  if (searchDebounceTimer) {
+  if (typeof searchDebounceTimer !== 'undefined' && searchDebounceTimer) {
     clearTimeout(searchDebounceTimer);
   }
 
   renderProducts();
   // Ocultar teclado
   hideKeyboard();
-}
-
-// Manejar scroll para ocultar teclado SOLO cuando se hace scroll manual
-let scrollTimeout = null;
-function handleScrollToHideKeyboard() {
-  // No ocultar si estamos en un scroll automático o si el teclado no está visible
-  if (isKeyboardVisible && !searchDebounceTimer) {
-    // Pequeño delay para no interferir con el scroll suave
-    if (scrollTimeout) clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      hideKeyboard();
-    }, 100);
-  }
 }
 
 // Prevenir que el scroll al hacer búsqueda suba al header
@@ -836,36 +820,7 @@ observeCards();
 toggleMobileBars(true);
 preventSearchScrollIssues();
 
-// Configurar el scroll para ocultar teclado
-window.addEventListener('scroll', handleScrollToHideKeyboard, { passive: true });
-window.addEventListener('touchmove', handleScrollToHideKeyboard, { passive: true });
-
-// Manejo de visualViewport para iOS (mantener posición al abrir teclado)
-if (window.visualViewport) {
-  let isTicking = false;
-  const handleViewportChange = () => {
-    if (!isTicking) {
-      window.requestAnimationFrame(() => {
-        const nav = document.querySelector('.mobile-bottom-nav');
-        if (!nav) { isTicking = false; return; }
-        if (nav.classList.contains('search-active')) {
-          const vw = window.visualViewport;
-          const navHeight = nav.offsetHeight;
-          const targetTop = Math.round(vw.offsetTop + vw.height - navHeight - 15);
-          nav.style.top = `${targetTop}px`;
-          nav.style.bottom = "auto";
-          nav.style.transition = "none";
-        } else {
-          nav.style.top = "auto";
-          nav.style.bottom = "25px";
-        }
-        isTicking = false;
-      });
-      isTicking = true;
-    }
-  };
-  window.visualViewport.addEventListener('resize', handleViewportChange);
-  window.visualViewport.addEventListener('scroll', handleViewportChange);
-}
+// Se han eliminado los event listeners de scroll y visualViewport
+// para evitar "traboncitos" en móviles y hacer la búsqueda más fluida al estilo Google/Facebook.
 
 console.log('✅ App.js cargado - Búsqueda optimizada y fluida');
