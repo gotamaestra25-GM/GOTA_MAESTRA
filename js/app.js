@@ -227,6 +227,19 @@ function renderModalContent() {
     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:24px; height:24px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
   modalBody.innerHTML = `
+        <div class="modal-producto">
+            <div class="modal-img">${imgHtml}</div>
+            <div class="modal-info">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div class="modal-nombre">${escapeHtml(currentModalProduct.nombre)}</div>
+                    <button class="fav-toggle-btn" data-id="${currentModalProduct.id}" style="background:none; border:none; cursor:pointer; padding:0 0 10px; display:flex; align-items:center; justify-content:center; transition:transform 0.2s;">${heartSvg}</button>
+                </div>
+                <div class="modal-genero">${generoLabel}</div>
+                <div class="acordes-titulo">🎵 ACORDES PRINCIPALES</div>
+                ${acordesHtml}
+            </div>
+        </div>
+
         <div class="disclaimer-modal" style="background: rgba(240, 230, 220, 0.6); padding: 15px 20px; border-radius: 16px; margin-bottom: 20px; text-align: center; font-size: 0.85rem; color: var(--texto-suave); font-style: italic; border: 1px solid rgba(212, 188, 160, 0.3);">
             La imagen del perfume original sirve como guía visual del aroma que estás adquiriendo; el producto final es una elaboración propia diseñada para ofrecerte la misma experiencia sensorial con nuestro sello artesanal.
         </div>
