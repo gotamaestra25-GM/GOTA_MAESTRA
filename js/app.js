@@ -195,15 +195,22 @@ function closeModal(isPopState = false) {
 
 // Función para obtener acordes (simplificada - para completar)
 function getAcordesConIntensidad(nombre) {
-  if (window.acordesData && acordesData[nombre]) {
-    return acordesData[nombre].map(a => ({ nombre: a[0], intensidad: a[1], color: a[2] }));
+  if (window.acordesData) {
+    // 1. Búsqueda exacta
+    if (acordesData[nombre]) {
+      return acordesData[nombre].map(a => ({ nombre: a[0], intensidad: a[1], color: a[2] }));
+    }
+    // 2. Búsqueda ignorando mayúsculas/espacios
+    const searchName = nombre.toLowerCase().trim();
+    const keys = Object.keys(acordesData);
+    for (let key of keys) {
+      if (key.toLowerCase().trim() === searchName) {
+        return acordesData[key].map(a => ({ nombre: a[0], intensidad: a[1], color: a[2] }));
+      }
+    }
   }
-  return [
-    { nombre: "amaderado", intensidad: 75, color: "#7B4F2E" },
-    { nombre: "cálido especiado", intensidad: 70, color: "#E07045" },
-    { nombre: "almizclado", intensidad: 65, color: "#D5B8A0" },
-    { nombre: "cítrico", intensidad: 60, color: "#F4D03F" }
-  ];
+  // Si no hay datos, devolvemos vacío para no inventar repetidos
+  return [];
 }
 
 function renderModalContent() {
@@ -211,7 +218,14 @@ function renderModalContent() {
   const generoLabel = currentModalProduct.genero === 'caballero' ? 'Caballero' : 'Dama';
   const precio = modalMlSelected === 100 ? PRECIO_100ML : PRECIO_50ML;
   const acordes = getAcordesConIntensidad(currentModalProduct.nombre);
-  const acordesHtml = acordes.map(ac => `<div class="acorde-item"><span class="acorde-nombre">${ac.nombre}</span><div class="acorde-barra-container"><div class="acorde-barra" style="width:${ac.intensidad}%;background-color:${ac.color};"></div></div><span class="acorde-porcentaje">${ac.intensidad}%</span></div>`).join('');
+  let acordesHtml = '';
+  let acordesTitulo = '';
+  
+  if (acordes.length > 0) {
+    acordesTitulo = '<div class="acordes-titulo"> ACORDES PRINCIPALES</div>';
+    acordesHtml = acordes.map(ac => `<div class="acorde-item"><span class="acorde-nombre">${ac.nombre}</span><div class="acorde-barra-container"><div class="acorde-barra" style="width:${ac.intensidad}%;background-color:${ac.color};"></div></div><span class="acorde-porcentaje">${ac.intensidad}%</span></div>`).join('');
+  }
+
   const emoji = currentModalProduct.genero === 'caballero' ? '👔' : '👗';
   let imgHtml = '';
   if (currentModalProduct.imgPath) {
@@ -235,7 +249,7 @@ function renderModalContent() {
                     <button class="fav-toggle-btn" data-id="${currentModalProduct.id}" style="background:none; border:none; cursor:pointer; padding:0 0 10px; display:flex; align-items:center; justify-content:center; transition:transform 0.2s;">${heartSvg}</button>
                 </div>
                 <div class="modal-genero">${generoLabel}</div>
-                <div class="acordes-titulo">🎵 ACORDES PRINCIPALES</div>
+                ${acordesTitulo}
                 ${acordesHtml}
             </div>
         </div>
@@ -331,14 +345,14 @@ function renderProducts() {
             <div class="card" data-id="${prod.id}">
                 <div class="card-img">
                     ${imgBlock}
-                    <div class="badge-gen">✨ Inspiraciones Premium</div>
+                    <div class="badge-gen"> Inspiraciones Premium</div>
                     <button class="card-fav-btn" data-id="${prod.id}" style="position:absolute; top:12px; right:12px; background:rgba(255,255,255,0.9); border:none; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:10; box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:all 0.3s ease;">${heartSvg}</button>
                 </div>
                 <div class="card-body">
                     <div class="card-genero">${generoLabel}</div>
                     <div class="card-nombre">${escapeHtml(prod.nombre)}</div>
                     <div class="card-precio-preview"><small>L.</small> 250 <small style="font-size:0.65rem; opacity:.7">50ml</small></div>
-                    <button class="btn-ver-detalle" data-id="${prod.id}">🔍 Ver acordes y agregar</button>
+                    <button class="btn-ver-detalle" data-id="${prod.id}"> Ver acordes y agregar</button>
                 </div>
             </div>
         `;
@@ -610,7 +624,7 @@ function openMobileSearch() {
 
   // Activar modo búsqueda (oculta header y hero, fija la barra arriba)
   document.body.classList.add('search-mode-active');
-  
+
   // Scrollear al inicio inmediatamente
   window.scrollTo({ top: 0, behavior: 'instant' });
 

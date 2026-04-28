@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Seguridad | GOTA MAESTRA HN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="imagenes gmaestra/logos/logos con fondo y color/Isotipo gota Maestra.png">
+    
+    <!-- CSP Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https:;">
+</head>
+
+<body style="background-color: var(--fondo);">
+    <header style="position: static;">
+        <div class="header-container" style="justify-content: center;">
+            <div class="logo">
+                <img src="imagenes gmaestra/logos/logos sin fondo y sin color/isotipo gmaestra.svg" alt="Gota Maestra" class="logo-img" onerror="this.style.display='none'">
+                <div class="logo-text">
+                    <h1>GOTA MAESTRA HN</h1>
+                    <p>Inspiraciones Premium</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="max-width: 800px; margin: 40px auto; padding: 20px;">
+        <h2 style="font-family: 'Playfair Display', serif; text-align: center; color: var(--primario-oscuro); margin-bottom: 30px; font-size: 2rem;">Seguridad y Privacidad del Sitio</h2>
+        
+        <div style="background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); color: var(--texto);">
+            
+            <h3 style="color: var(--primario); margin-bottom: 10px;">1. Arquitectura del Sitio (Alta Seguridad)</h3>
+            <p style="line-height: 1.6; margin-bottom: 20px; color: var(--texto-suave);">Este sitio web funciona bajo una arquitectura estática (Serverless). Esto significa que <strong>no utilizamos bases de datos tradicionales</strong> que puedan ser hackeadas mediante inyecciones SQL u otros ataques comunes. Toda la información mostrada es de solo lectura y se carga de manera segura.</p>
+
+            <h3 style="color: var(--primario); margin-bottom: 10px;">2. Procesamiento de Pedidos y Pagos</h3>
+            <p style="line-height: 1.6; margin-bottom: 20px; color: var(--texto-suave);">Por tu seguridad y la nuestra, <strong>no procesamos ni almacenamos tarjetas de crédito o información bancaria</strong> en este sitio. Todo el proceso de confirmación de pedido se realiza a través de un canal encriptado de extremo a extremo mediante <strong>WhatsApp</strong>. Cualquier transacción financiera se gestiona directamente con nuestro equipo autorizado a través de dicho canal de mensajería.</p>
+
+            <h3 style="color: var(--primario); margin-bottom: 10px;">3. Privacidad de Datos Locales</h3>
+            <p style="line-height: 1.6; margin-bottom: 20px; color: var(--texto-suave);">Tu "Carrito de Compras" y tus "Favoritos" se guardan de forma exclusiva en el almacenamiento local de tu dispositivo (Local Storage). Nosotros no guardamos cookies invasivas ni enviamos esta información a servidores externos sin tu consentimiento expreso (al presionar el botón de enviar por WhatsApp).</p>
+
+            <h3 style="color: var(--primario); margin-bottom: 10px;">4. Conexión Segura HTTPS</h3>
+            <p style="line-height: 1.6; margin-bottom: 20px; color: var(--texto-suave);">Gota Maestra opera bajo el protocolo <strong>HTTPS (SSL/TLS)</strong>, lo que garantiza que tu conexión a esta página web está cifrada y ningún intermediario puede modificar el contenido que visualizas en pantalla.</p>
+
+            <h3 style="color: var(--primario); margin-bottom: 10px;">5. Políticas de Content Security Policy (CSP)</h3>
+            <p style="line-height: 1.6; margin-bottom: 30px; color: var(--texto-suave);">Hemos implementado políticas de seguridad CSP estrictas en el código de la página que impiden la ejecución de scripts maliciosos de terceros (ataques XSS), asegurando que tu visita a nuestra tienda sea 100% segura.</p>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="index.html" style="background: var(--primario); color: white; padding: 12px 30px; text-decoration: none; border-radius: 30px; font-weight: 600; display: inline-block; transition: all 0.3s ease;">← Volver a la Tienda</a>
+            </div>
+        </div>
+    </div>
+
+    <footer style="margin-top: 50px;">
+        <p>© 2025 GOTA MAESTRA HN – Inspiraciones premium de calidad. Envíos a nivel nacional.</p>
+    </footer>
+
+</body>
+</html>
