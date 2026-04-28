@@ -970,7 +970,7 @@ footer {
   }
 
   .hamburger {
-    display: none !important;
+    display: flex !important; /* Mostramos el menú hamburguesa en mobile */
   }
 
   .filtros-bar .search-box {
