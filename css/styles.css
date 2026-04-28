@@ -1588,7 +1588,6 @@ footer {
 
 /* ====== MEJORAS DE BÚSQUEDA FLUIDA ====== */
 
-body.search-mode-active header.header-container,
 body.search-mode-active .hero {
   display: none !important;
 }
@@ -1620,17 +1619,7 @@ body.search-mode-active .mobile-bottom-nav.search-active .nav-pill-container {
 }
 
 body.search-mode-active .filtros-wrapper {
-  margin-top: 20px !important; /* Espacio modificado ya que la barra está abajo */
-  position: relative !important;
-  top: 0 !important;
-  z-index: 100 !important;
-}
-
-/* Evitar que el scroll del header interfiera con la búsqueda */
-.search-active .filtros-wrapper {
-  position: relative;
-  top: 0 !important;
-  z-index: 100;
+  margin-top: 60px !important; /* Compensa la altura del header fijo */
 }
 
 /* Mejorar la transición del modo búsqueda */
