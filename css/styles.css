@@ -517,7 +517,7 @@ header.header-scrolled .header-container {
   border: none;
   font-size: 1.8rem;
   cursor: pointer;
-  color: #0066FF;
+  color: var(--texto-suave);
   font-weight: 500;
 }
 
@@ -636,8 +636,9 @@ header.header-scrolled .header-container {
 }
 
 .ml-btn:not(.selected) {
-  background: #f4f8ff !important;
-  color: #0066FF !important;
+  background: white !important;
+  color: #887a6d !important;
+  border: 1px solid rgba(198, 139, 89, 0.3) !important;
 }
 
 .precio-dinamico {
