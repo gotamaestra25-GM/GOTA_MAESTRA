@@ -12,6 +12,22 @@ body {
   line-height: 1.5;
 }
 
+/* Scrollbar Global Estética */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f5f0eb;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(194, 126, 74, 0.4);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(194, 126, 74, 0.7);
+}
+
 :root {
   --primario: #c27e4a;
   --primario-oscuro: #a35f32;
@@ -769,6 +785,22 @@ header.header-scrolled .header-container {
   flex: 1;
   overflow-y: auto;
   padding: 16px;
+}
+
+/* Scrollbar personalizada para el carrito */
+.cart-items::-webkit-scrollbar {
+  width: 6px;
+}
+.cart-items::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 10px 0;
+}
+.cart-items::-webkit-scrollbar-thumb {
+  background: rgba(194, 126, 74, 0.3);
+  border-radius: 10px;
+}
+.cart-items::-webkit-scrollbar-thumb:hover {
+  background: rgba(194, 126, 74, 0.6);
 }
 
 .cart-item {
