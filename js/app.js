@@ -242,16 +242,16 @@ function renderModalContent() {
   }
   const isFav = favorites.some(f => f.id === currentModalProduct.id);
   const heartSvg = isFav ?
-    `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:24px; height:24px; color:#ff4757;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg>` :
-    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:24px; height:24px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:26px; height:26px; color:#ff4757;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg>` :
+    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:26px; height:26px; color:#0066FF;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
   modalBody.innerHTML = `
         <div class="modal-producto">
             <div class="modal-img">${imgHtml}</div>
             <div class="modal-info">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                    <div class="modal-nombre">${escapeHtml(currentModalProduct.nombre)}</div>
-                    <button class="fav-toggle-btn" data-id="${currentModalProduct.id}" style="background:none; border:none; cursor:pointer; padding:0 0 10px; display:flex; align-items:center; justify-content:center; transition:transform 0.2s;">${heartSvg}</button>
+                <div style="position:relative; display:flex; justify-content:center; align-items:center; margin-bottom: 5px;">
+                    <div class="modal-nombre" style="margin:0; padding-right: 30px;">${escapeHtml(currentModalProduct.nombre)}</div>
+                    <button class="fav-toggle-btn" data-id="${currentModalProduct.id}" style="position:absolute; right:0; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; padding:0; display:flex; align-items:center; justify-content:center; transition:transform 0.2s;">${heartSvg}</button>
                 </div>
                 <div class="modal-genero">${generoLabel}</div>
                 ${acordesTitulo}
@@ -259,7 +259,7 @@ function renderModalContent() {
             </div>
         </div>
 
-        <div class="disclaimer-modal" style="background: rgba(240, 230, 220, 0.6); padding: 15px 20px; border-radius: 16px; margin-bottom: 20px; text-align: center; font-size: 0.85rem; color: var(--texto-suave); font-style: italic; border: 1px solid rgba(212, 188, 160, 0.3);">
+        <div class="disclaimer-modal" style="background: rgba(243, 238, 233, 0.8); padding: 18px 24px; border-radius: 12px; margin-bottom: 20px; text-align: center; font-size: 0.8rem; color: #8a7a6b; font-style: italic; border: none; line-height: 1.5;">
             La imagen del perfume original sirve como guía visual del aroma que estás adquiriendo; el producto final es una elaboración propia diseñada para ofrecerte la misma experiencia sensorial con nuestro sello artesanal.
         </div>
 

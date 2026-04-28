@@ -517,6 +517,8 @@ header.header-scrolled .header-container {
   border: none;
   font-size: 1.8rem;
   cursor: pointer;
+  color: #0066FF;
+  font-weight: 500;
 }
 
 .modal-body {
@@ -525,47 +527,52 @@ header.header-scrolled .header-container {
 
 .modal-producto {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
   margin-bottom: 20px;
-  flex-wrap: wrap;
 }
 
 .modal-img {
-  width: 110px;
-  height: 130px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 16px;
+  width: 140px;
+  height: 140px;
+  background: white;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 1px solid var(--borde);
+  border: none;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
 }
 
 .modal-info {
-  flex: 1;
+  width: 100%;
+  text-align: center;
 }
 
 .modal-nombre {
   font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
+  font-size: 1.55rem;
   font-weight: 600;
+  color: #222;
+  margin-bottom: 5px;
 }
 
 .modal-genero {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--primario);
-  margin-bottom: 12px;
+  letter-spacing: 1.5px;
+  color: #c68b59;
+  margin-bottom: 16px;
 }
 
 .acordes-titulo {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--texto-suave);
-  margin: 8px 0 14px;
+  letter-spacing: 2px;
+  color: #887a6d;
+  margin: 10px 0 16px;
 }
 
 .acorde-item {
@@ -576,15 +583,17 @@ header.header-scrolled .header-container {
 }
 
 .acorde-nombre {
-  width: 120px;
+  width: 115px;
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
+  color: #222;
+  text-align: right;
 }
 
 .acorde-barra-container {
   flex: 1;
   height: 8px;
-  background: rgba(240, 226, 214, 0.7);
+  background: rgba(240, 226, 214, 0.6);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -597,10 +606,10 @@ header.header-scrolled .header-container {
 }
 
 .acorde-porcentaje {
-  width: 40px;
-  font-size: 0.7rem;
-  text-align: right;
-  color: var(--texto-suave);
+  width: 35px;
+  font-size: 0.75rem;
+  color: #888;
+  text-align: left;
 }
 
 .ml-selector {
@@ -611,17 +620,24 @@ header.header-scrolled .header-container {
 
 .ml-btn {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
   border-radius: 40px;
-  border: 1px solid var(--borde);
-  background: rgba(255, 255, 255, 0.6);
   font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
+  border: none !important;
+  transition: all 0.2s;
 }
 
 .ml-btn.selected {
-  background: var(--primario);
-  color: white;
+  background: #c68b59 !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(198, 139, 89, 0.3) !important;
+}
+
+.ml-btn:not(.selected) {
+  background: #f4f8ff !important;
+  color: #0066FF !important;
 }
 
 .precio-dinamico {
