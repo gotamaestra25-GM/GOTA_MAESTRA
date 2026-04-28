@@ -325,7 +325,7 @@ function renderProducts() {
                 <div class="card-body">
                     <div class="card-genero">${generoLabel}</div>
                     <div class="card-nombre">${escapeHtml(prod.nombre)}</div>
-                    <div class="card-precio-preview"><small>L.</small> 250 <small style="font-size:0.65rem; opacity:.7">50ml | 100ml</small></div>
+                    <div class="card-precio-preview"><small>L.</small> 250 <small style="font-size:0.65rem; opacity:.7">50ml</small></div>
                     <button class="btn-ver-detalle" data-id="${prod.id}">🔍 Ver acordes y agregar</button>
                 </div>
             </div>
@@ -549,6 +549,114 @@ function setupSearchHandlers() {
     });
   }
 
+  // Para el search integrado en mobile
+  const integratedSearchInput = document.getElementById('integratedSearchInput');
+  if (integratedSearchInput) {
+    integratedSearchInput.addEventListener('focus', () => {
+      // Evitar que el scroll se mueva al hacer focus
+      const bottomNav = document.querySelector('.mobile-bottom-nav');
+      if (bottomNav && bottomNav.classList.contains('search-active')) {
+        // Mantener la posición
+        const filtrosWrapper = document.querySelector('.filtros-wrapper');
+        if (filtrosWrapper) {
+          const filtrosRect = filtrosWrapper.getBoundingClientRect();
+          if (filtrosRect.top < 50) {
+            // Solo ajustar si es necesario
+            window.scrollTo({ top: window.scrollY, behavior: 'auto' });
+          }
+        }
+      }
+    });
+
+    integratedSearchInput.addEventListener('input', (e) => {
+      if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        const term = e.target.value.toLowerCase().trim();
+        if (searchInput) searchInput.value = term;
+        renderProducts();
+      }, 150);
+    });
+
+    integratedSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        integratedSearchInput.blur();
+        hideKeyboard();
+      }
+    });
+  }
+}
+
+// Función mejorada para abrir el modo de búsqueda en mobile
+function openMobileSearch() {
+  const bottomNav = document.querySelector('.mobile-bottom-nav');
+  const integratedSearchInput = document.getElementById('integratedSearchInput');
+
+  if (bottomNav) {
+    bottomNav.classList.add('search-active');
+  }
+
+  // Activar modo búsqueda (oculta header y hero, fija la barra arriba)
+  document.body.classList.add('search-mode-active');
+  
+  // Scrollear al inicio inmediatamente
+  window.scrollTo({ top: 0, behavior: 'instant' });
+
+  // Focus con pequeño delay para asegurar que la UI esté lista
+  setTimeout(() => {
+    if (integratedSearchInput) {
+      integratedSearchInput.focus();
+    }
+  }, 50);
+}
+
+// Función mejorada para cerrar el modo de búsqueda
+function closeIntegratedSearchMode() {
+  const bottomNav = document.querySelector('.mobile-bottom-nav');
+  const integratedSearchInput = document.getElementById('integratedSearchInput');
+
+  if (bottomNav) {
+    bottomNav.classList.remove('search-active');
+    bottomNav.style.top = "auto";
+    bottomNav.style.bottom = "25px";
+  }
+
+  // Desactivar modo búsqueda
+  document.body.classList.remove('search-mode-active');
+
+  if (integratedSearchInput) {
+    integratedSearchInput.value = '';
+  }
+
+  if (searchInput) {
+    searchInput.value = '';
+  }
+
+  // Limpiar el debounce
+  if (typeof searchDebounceTimer !== 'undefined' && searchDebounceTimer) {
+    clearTimeout(searchDebounceTimer);
+  }
+
+  renderProducts();
+  // Ocultar teclado
+  hideKeyboard();
+}
+
+// Prevenir que el scroll al hacer búsqueda suba al header
+function preventSearchScrollIssues() {
+  // Escuchar eventos de scroll y prevenir si es necesario
+  let isScrollingProgrammatically = false;
+
+  // Override de scrollIntoView para casos específicos
+  const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;
+  window.HTMLElement.prototype.scrollIntoView = function (options) {
+    // Si es el header y estamos en modo búsqueda, prevenir
+    if (this.classList && this.classList.contains('header-container') &&
+      document.querySelector('.mobile-bottom-nav')?.classList.contains('search-active')) {
+      return;
+    }
+    originalScrollIntoView.call(this, options);
+  };
 }
 
 // ========== EVENT LISTENERS ==========
@@ -607,7 +715,61 @@ loadCart();
 loadFavorites();
 renderProducts();
 
-// ========== MOBILE EVENT HANDLERS REMOVED IN FAVOR OF DESKTOP STYLE ==========
+// ========== MOBILE BOTTOM NAV HANDLERS ==========
+const mobileSearchBtn = document.getElementById('mobileSearchBtn');
+const mobileSearchOverlay = document.getElementById('mobileSearchOverlay');
+const closeMobileSearch = document.getElementById('closeMobileSearch');
+const mobileSearchInput = document.getElementById('mobileSearchInput');
+const integratedSearchInput = document.getElementById('integratedSearchInput');
+const closeIntegratedSearch = document.getElementById('closeIntegratedSearch');
+
+// Configurar handlers de búsqueda
+setupSearchHandlers();
+
+mobileSearchBtn?.addEventListener('click', openMobileSearch);
+closeIntegratedSearch?.addEventListener('click', closeIntegratedSearchMode);
+
+// Favorites overlay
+const mobileFavBtn = document.getElementById('mobileFavBtn');
+const favOverlay = document.getElementById('favOverlay');
+const closeFavBtn = document.getElementById('closeFavBtn');
+
+mobileFavBtn?.addEventListener('click', () => {
+  favOverlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  setActiveNavItem('mobileFavBtn');
+  toggleMobileBars(false);
+});
+
+closeFavBtn?.addEventListener('click', closeFavOverlay);
+favOverlay?.addEventListener('click', (e) => {
+  if (e.target === favOverlay) closeFavOverlay();
+});
+
+function closeFavOverlay() {
+  favOverlay.style.display = 'none';
+  document.body.style.overflow = '';
+  setActiveNavItem('mobileHomeBtn');
+  toggleMobileBars(true);
+}
+
+const mobileNotifBtn = document.getElementById('mobileNotifBtn');
+mobileNotifBtn?.addEventListener('click', () => {
+  showToast("🎉 ¡Pronto! Tendremos ofertas especiales aquí.");
+  setActiveNavItem('mobileNotifBtn');
+  document.getElementById('notifDot').style.display = 'none';
+  setTimeout(() => setActiveNavItem('mobileHomeBtn'), 2000);
+});
+
+setTimeout(() => {
+  const dot = document.getElementById('notifDot');
+  if (dot) dot.style.display = 'block';
+}, 10000);
+
+function setActiveNavItem(id) {
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  document.getElementById(id)?.classList.add('active');
+}
 
 // ========== ANIMATIONS AND PREMIUM EFFECTS ==========
 let lastScrollY = 0;
@@ -671,6 +833,8 @@ window.addEventListener('popstate', (e) => {
 
 // Activate initial
 observeCards();
+toggleMobileBars(true);
+preventSearchScrollIssues();
 
 // Se han eliminado los event listeners de scroll y visualViewport
 // para evitar "traboncitos" en móviles y hacer la búsqueda más fluida al estilo Google/Facebook.
