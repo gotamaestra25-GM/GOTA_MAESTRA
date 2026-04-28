@@ -940,27 +940,32 @@ footer {
   }
 
   .header-container {
-    height: 60px;
+    height: 60px !important;
+  }
+
+  header.header-scrolled .header-container {
+    height: 60px !important;
   }
 
   .nav-links,
-  .cart-icon,
-  .floating-cart-btn {
+  .cart-icon {
     display: none !important;
   }
 
   .hamburger {
-    display: none !important;
+    display: flex !important;
   }
 
   .filtros-bar .search-box {
-    display: none !important;
+    display: flex !important;
+    width: 100%;
+    margin-bottom: 12px;
   }
-
 
   .filtros-bar {
     justify-content: center;
-    padding: 10px;
+    padding: 15px;
+    flex-direction: column;
   }
 
   .hero {
