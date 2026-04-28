@@ -1192,7 +1192,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: none; /* Liquid glass fix: removed solid border */
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 58px;
@@ -1289,8 +1289,8 @@ footer {
 
 .notif-dot {
   position: absolute;
-  top: 10px;
-  right: 12px;
+  top: -2px;
+  right: 2px;
   width: 8px;
   height: 8px;
   background: #ff4757;
@@ -1590,27 +1590,33 @@ body.search-mode-active .hero {
 }
 
 body.search-mode-active .mobile-bottom-nav.search-active {
-  top: 0 !important;
-  bottom: auto !important;
-  border-radius: 0 !important;
-  padding-top: max(env(safe-area-inset-top), 10px) !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
-  background: rgba(255, 255, 255, 0.98) !important;
+  top: auto !important;
+  bottom: 0 !important;
+  border-radius: 24px 24px 0 0 !important;
+  padding-top: 15px !important;
+  padding-bottom: max(env(safe-area-inset-bottom), 15px) !important;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(30px) saturate(210%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(210%) !important;
   transform: none !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 body.search-mode-active .mobile-bottom-nav.search-active .nav-pill-container {
-  border-radius: 0 !important;
+  border-radius: 100px !important;
   border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
   width: 100% !important;
   max-width: 100% !important;
-  padding: 10px 15px !important;
+  padding: 8px 12px !important;
+  height: 56px !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 body.search-mode-active .filtros-wrapper {
-  margin-top: 70px !important; /* Espacio para la barra de búsqueda superior */
+  margin-top: 20px !important; /* Espacio modificado ya que la barra está abajo */
   position: relative !important;
   top: 0 !important;
   z-index: 100 !important;

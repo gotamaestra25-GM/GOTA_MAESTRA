@@ -539,6 +539,14 @@ function setupSearchHandlers() {
         renderProducts();
       }, 150);
     });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        searchInput.blur();
+        hideKeyboard();
+      }
+    });
   }
 
   // Para el search integrado en mobile
@@ -567,6 +575,14 @@ function setupSearchHandlers() {
         if (searchInput) searchInput.value = term;
         renderProducts();
       }, 150);
+    });
+
+    integratedSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        integratedSearchInput.blur();
+        hideKeyboard();
+      }
     });
   }
 }
