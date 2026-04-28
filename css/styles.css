@@ -940,7 +940,11 @@ footer {
   }
 
   .header-container {
-    height: 60px;
+    height: 60px !important;
+  }
+  
+  header.header-scrolled .header-container {
+    height: 60px !important;
   }
 
   .nav-links,
@@ -998,8 +1002,8 @@ footer {
   }
 
   .filtros-wrapper {
-    top: 60px !important;
-    z-index: 100 !important;
+    top: 61px !important;
+    z-index: 99 !important;
     padding: 10px 15px;
   }
 

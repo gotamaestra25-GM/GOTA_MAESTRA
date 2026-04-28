@@ -227,32 +227,31 @@ function renderModalContent() {
     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:24px; height:24px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
   modalBody.innerHTML = `
-        <div class="modal-producto">
-            <div class="modal-img">${imgHtml}</div>
-            <div class="modal-info">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                    <div class="modal-nombre">${escapeHtml(currentModalProduct.nombre)}</div>
-                    <button class="fav-toggle-btn" data-id="${currentModalProduct.id}" style="background:none; border:none; cursor:pointer; padding:0 0 10px; display:flex; align-items:center; justify-content:center; transition:transform 0.2s;">${heartSvg}</button>
-                </div>
-                <div class="modal-genero">${generoLabel}</div>
-                <div class="acordes-titulo">🎵 ACORDES PRINCIPALES</div>
-                ${acordesHtml}
-            </div>
+        <div class="disclaimer-modal" style="background: rgba(240, 230, 220, 0.6); padding: 15px 20px; border-radius: 16px; margin-bottom: 20px; text-align: center; font-size: 0.85rem; color: var(--texto-suave); font-style: italic; border: 1px solid rgba(212, 188, 160, 0.3);">
+            La imagen del perfume original sirve como guía visual del aroma que estás adquiriendo; el producto final es una elaboración propia diseñada para ofrecerte la misma experiencia sensorial con nuestro sello artesanal.
         </div>
+
         <div class="ml-selector">
-            <button class="ml-btn ${modalMlSelected === 50 ? 'selected' : ''}" data-ml="50">50 ml · L.250</button>
-            <button class="ml-btn ${modalMlSelected === 100 ? 'selected' : ''}" data-ml="100">100 ml · L.500</button>
+            <button class="ml-btn ${modalMlSelected === 50 ? 'selected' : ''}" data-ml="50" style="flex:1;">50 ml · L.250</button>
+            <button class="ml-btn ${modalMlSelected === 100 ? 'selected' : ''}" data-ml="100" style="flex:1;">100 ml · L.500</button>
         </div>
-        <div class="precio-dinamico">L. ${precio * modalCantidad}</div>
-        <div class="cantidad-row">
-            <span class="cantidad-label">Cantidad</span>
-            <div class="qty-ctrl">
-                <button class="qty-decr-modal">−</button>
-                <span class="qty-num" id="modalQty">${modalCantidad}</span>
-                <button class="qty-incr-modal">+</button>
+
+        <div class="modal-bote-generico" style="background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(250,245,240,1) 100%); border-radius: 20px; padding: 25px 20px 15px; text-align: center; margin: 20px 0; border: 1px solid rgba(212, 188, 160, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+            <p style="font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--texto-suave); font-style: italic; margin-bottom: 20px;">Así lucirá tu fragancia</p>
+            <img src="imagenes gmaestra/tamaños_bote/bote ${modalMlSelected} ml.png" alt="Bote de ${modalMlSelected} ml" style="max-width: 80px; height: auto; display: block; margin: 0 auto; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.15));">
+            <div style="font-size: 0.75rem; letter-spacing: 2px; color: var(--texto-suave); font-weight: 600; margin-top: 25px; border-top: 1px solid rgba(212, 188, 160, 0.2); padding-top: 15px;">PRESENTACIÓN ${modalMlSelected} ML</div>
+        </div>
+
+        <div class="precio-dinamico" style="text-align: left; font-size: 1.8rem; font-weight: 700; color: var(--primario-oscuro); margin-bottom: 10px;">L. ${precio * modalCantidad}</div>
+        <div class="cantidad-row" style="display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-bottom: 20px;">
+            <span class="cantidad-label" style="font-size: 1rem; color: var(--texto);">Cantidad:</span>
+            <div class="qty-ctrl" style="background: white; border-radius: 50px; padding: 5px 10px; display: flex; gap: 15px; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <button class="qty-decr-modal" style="border:none; background:none; font-size:1.4rem; color:var(--primario); cursor:pointer;">−</button>
+                <span class="qty-num" id="modalQty" style="font-weight:600; font-size:1rem;">${modalCantidad}</span>
+                <button class="qty-incr-modal" style="border:none; background:none; font-size:1.4rem; color:var(--primario); cursor:pointer;">+</button>
             </div>
         </div>
-        <button class="btn-agregar-modal" id="modalAddToCart">🛒 Agregar al carrito · L. ${precio * modalCantidad}</button>
+        <button class="btn-agregar-modal" id="modalAddToCart" style="width:100%; background:var(--primario); color:white; border:none; border-radius:50px; padding:15px; font-size:1rem; font-weight:600; cursor:pointer;">Agregar al carrito · L. ${precio * modalCantidad}</button>
     `;
 
   document.querySelector('.fav-toggle-btn')?.addEventListener('click', (e) => {
