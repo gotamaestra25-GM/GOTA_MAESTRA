@@ -626,18 +626,17 @@ function openMobileSearch() {
   const bottomNav = document.querySelector('.mobile-bottom-nav');
   const integratedSearchInput = document.getElementById('integratedSearchInput');
 
-  // Guardar posición actual antes de subir al inicio
+  // Guardar posición actual para restaurarla al cerrar
   savedScrollBeforeSearch = window.scrollY;
 
   if (bottomNav) {
     bottomNav.classList.add('search-active');
   }
 
-  // Activar modo búsqueda (oculta header y hero, fija la barra arriba)
+  // Activar modo búsqueda (oculta hero, fija la barra abajo)
   document.body.classList.add('search-mode-active');
 
-  // Scrollear al inicio inmediatamente
-  window.scrollTo({ top: 0, behavior: 'instant' });
+  // NO se mueve el scroll — el usuario se queda donde está
 
   // Focus con pequeño delay para asegurar que la UI esté lista
   setTimeout(() => {
@@ -646,6 +645,7 @@ function openMobileSearch() {
     }
   }, 50);
 }
+
 
 // Función mejorada para cerrar el modo de búsqueda
 function closeIntegratedSearchMode() {
