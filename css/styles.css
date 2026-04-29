@@ -17,13 +17,16 @@ body {
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #f5f0eb;
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(194, 126, 74, 0.4);
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(194, 126, 74, 0.7);
 }
@@ -559,7 +562,7 @@ header.header-scrolled .header-container {
   justify-content: center;
   flex-shrink: 0;
   border: none;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
 }
 
 .modal-info {
@@ -791,14 +794,17 @@ header.header-scrolled .header-container {
 .cart-items::-webkit-scrollbar {
   width: 6px;
 }
+
 .cart-items::-webkit-scrollbar-track {
   background: transparent;
   margin: 10px 0;
 }
+
 .cart-items::-webkit-scrollbar-thumb {
   background: rgba(194, 126, 74, 0.3);
   border-radius: 10px;
 }
+
 .cart-items::-webkit-scrollbar-thumb:hover {
   background: rgba(194, 126, 74, 0.6);
 }
@@ -991,7 +997,7 @@ footer {
   .header-container {
     height: 60px !important;
   }
-  
+
   header.header-scrolled .header-container {
     height: 60px !important;
   }
@@ -1003,7 +1009,8 @@ footer {
   }
 
   .hamburger {
-    display: flex !important; /* Mostramos el menú hamburguesa en mobile */
+    display: flex !important;
+    /* Mostramos el menú hamburguesa en mobile */
   }
 
   .filtros-bar .search-box {
@@ -1194,8 +1201,9 @@ footer {
 }
 
 .search-active.mobile-bottom-nav {
-  transition: none !important;
-  /* Vital para evitar jitter al hacer scroll */
+  /* Solo desactivamos la transición de posición (bottom/top) para evitar jitter,
+     pero dejamos que opacity y transform se puedan animar suavemente */
+  transition: opacity 0.25s ease, transform 0.25s ease !important;
   pointer-events: auto;
   z-index: 3000;
 }
@@ -1245,9 +1253,14 @@ footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: none; /* Liquid glass fix: removed solid border */
+  border: none;
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Transición suave para la forma y sombra de la píldora */
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s ease,
+    border-radius 0.3s ease;
   min-height: 58px;
   width: 92%;
   max-width: 480px;
@@ -1282,6 +1295,23 @@ footer {
 .search-active .pill-left,
 .search-active .pill-right {
   display: none;
+}
+
+/* Fade out suave de los ítems de nav al abrir búsqueda */
+.mobile-bottom-nav:not(.search-active) .pill-center,
+.mobile-bottom-nav:not(.search-active) .pill-left,
+.mobile-bottom-nav:not(.search-active) .pill-right {
+  animation: navItemsFadeIn 0.25s ease forwards;
+}
+
+@keyframes navItemsFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .search-active .nav-pill-container {
@@ -1323,20 +1353,53 @@ footer {
   height: 24px !important;
   display: block !important;
   stroke: #000 !important;
-  /* Siempre negro */
   stroke-width: 1.8px;
 }
-
 
 .nav-item.active svg {
   fill: none;
   stroke: #000;
-  transition: all 0.3s ease;
 }
 
+/* Efecto de llenado como agua: el relleno sube de abajo hacia arriba */
 .nav-item.active.scrolled svg {
   fill: #000;
+  animation: waterRise 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: clip-path;
 }
+
+@keyframes waterRise {
+  from {
+    clip-path: inset(100% 0 0 0);
+    fill: #000;
+  }
+  to {
+    clip-path: inset(0% 0 0 0);
+    fill: #000;
+  }
+}
+
+/* El agua drena de arriba hacia abajo al subir el scroll.
+   Solo se activa si el usuario ya hizo scroll al menos una vez (.was-scrolled),
+   evitando el corte en la carga inicial de la página. */
+.nav-item.active.was-scrolled:not(.scrolled) svg {
+  animation: waterDrain 0.5s cubic-bezier(0.4, 0, 0.6, 1);
+  /* Sin forwards: después de la animación vuelve al estado natural (outline visible) */
+  will-change: clip-path;
+}
+
+@keyframes waterDrain {
+  /* El nivel del agua baja: el relleno desaparece de arriba hacia abajo */
+  0%  { clip-path: inset(0%  0 0 0); fill: #000; }
+  82% { clip-path: inset(98% 0 0 0); fill: #000; }
+  /* Snap invisible (~5ms): reset clip-path para que el outline vuelva limpio */
+  83% { clip-path: inset(0%  0 0 0); fill: none; }
+ 100% { clip-path: inset(0%  0 0 0); fill: none; }
+}
+
+
+
+
 
 
 
@@ -1450,12 +1513,12 @@ footer {
   align-items: center;
   gap: 10px;
   margin-left: 10px;
-  animation: slideInRight 0.3s ease;
+  animation: searchBoxSlideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes slideInRight {
+@keyframes searchBoxSlideIn {
   from {
-    transform: translateX(20px);
+    transform: translateX(14px);
     opacity: 0;
   }
 
@@ -1637,6 +1700,7 @@ footer {
 
 /* ====== MEJORAS DE BÚSQUEDA FLUIDA ====== */
 
+/* Hero se oculta suavemente al entrar en modo búsqueda */
 body.search-mode-active .hero {
   display: none !important;
 }
@@ -1658,7 +1722,7 @@ body.search-mode-active .mobile-bottom-nav.search-active {
 body.search-mode-active .mobile-bottom-nav.search-active .nav-pill-container {
   border-radius: 100px !important;
   border: none !important;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
   background: rgba(255, 255, 255, 0.95) !important;
   width: 100% !important;
   max-width: 100% !important;
@@ -1668,7 +1732,8 @@ body.search-mode-active .mobile-bottom-nav.search-active .nav-pill-container {
 }
 
 body.search-mode-active .filtros-wrapper {
-  margin-top: 60px !important; /* Compensa la altura del header fijo */
+  margin-top: 60px !important;
+  /* Compensa la altura del header fijo */
 }
 
 /* Mejorar la transición del modo búsqueda */

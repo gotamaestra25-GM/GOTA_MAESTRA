@@ -697,6 +697,14 @@ document.querySelectorAll('.filtro-btn').forEach(btn => {
     document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     filtroGenero = btn.dataset.genero;
+    // Ir al inicio del catálogo al cambiar de categoría (posición absoluta fija)
+    const catalogo = document.getElementById('catalogo');
+    if (catalogo) {
+      const headerH = document.querySelector('header')?.offsetHeight || 76;
+      const filtrosH = document.querySelector('.filtros-wrapper')?.offsetHeight || 0;
+      const targetY = catalogo.getBoundingClientRect().top + window.scrollY - headerH - filtrosH;
+      window.scrollTo({ top: targetY, behavior: 'instant' });
+    }
     renderProducts();
   });
 });
@@ -818,6 +826,7 @@ window.addEventListener('scroll', () => {
   if (homeBtn && homeBtn.classList.contains('active')) {
     if (currentScrollY > 100) {
       homeBtn.classList.add('scrolled');
+      homeBtn.classList.add('was-scrolled'); // persiste para activar la animación de drenado
     } else {
       homeBtn.classList.remove('scrolled');
     }
