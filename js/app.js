@@ -618,10 +618,16 @@ function setupSearchHandlers() {
   }
 }
 
+// Guarda la posición de scroll antes de abrir el buscador
+let savedScrollBeforeSearch = 0;
+
 // Función mejorada para abrir el modo de búsqueda en mobile
 function openMobileSearch() {
   const bottomNav = document.querySelector('.mobile-bottom-nav');
   const integratedSearchInput = document.getElementById('integratedSearchInput');
+
+  // Guardar posición actual antes de subir al inicio
+  savedScrollBeforeSearch = window.scrollY;
 
   if (bottomNav) {
     bottomNav.classList.add('search-active');
@@ -652,7 +658,7 @@ function closeIntegratedSearchMode() {
     bottomNav.style.bottom = "25px";
   }
 
-  // Desactivar modo búsqueda
+  // Desactivar modo búsqueda (el hero y el layout normal vuelven)
   document.body.classList.remove('search-mode-active');
 
   if (integratedSearchInput) {
@@ -669,8 +675,14 @@ function closeIntegratedSearchMode() {
   }
 
   renderProducts();
-  // Ocultar teclado
   hideKeyboard();
+
+  // Restaurar la posición donde estaba el usuario antes de abrir el buscador.
+  // Se usa rAF para esperar a que el hero y el layout vuelvan a renderizarse
+  // antes de aplicar el scroll, evitando el salto visual al inicio.
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: savedScrollBeforeSearch, behavior: 'instant' });
+  });
 }
 
 // Prevenir que el scroll al hacer búsqueda suba al header
