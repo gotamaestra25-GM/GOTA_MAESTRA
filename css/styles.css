@@ -275,6 +275,8 @@ header.header-scrolled .header-container {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  /* Evita repintados costosos al hacer sticky scroll */
+  contain: layout style;
 }
 
 
@@ -289,6 +291,7 @@ header.header-scrolled .header-container {
   gap: 14px;
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   padding: 12px 20px;
   border-radius: 60px;
   border: 1px solid var(--glass-border);
@@ -373,12 +376,20 @@ header.header-scrolled .header-container {
 .card {
   background: var(--fondo-card);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
   border: 1px solid var(--glass-border);
   cursor: pointer;
-  transition: all 0.3s;
+  /* Transición específica (no 'all') para mejor rendimiento GPU */
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.3s ease,
+              box-shadow 0.3s ease;
+  /* Compositing en capa propia */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .card:hover {
@@ -1779,3 +1790,123 @@ html {
     scroll-behavior: auto;
   }
 }
+
+/* ================================================================
+   FLUIDEZ Y RENDIMIENTO PREMIUM — Android · iPhone · PC
+   ================================================================ */
+
+/* 1. Elimina el retraso de 300ms al tocar en móvil (Android e iOS)
+      Aplica a todos los elementos interactivos */
+button,
+a,
+input,
+select,
+label,
+.card,
+.filtro-btn,
+.nav-item,
+.nav-cart-btn-pill,
+.ml-btn,
+.btn-ver-detalle,
+.btn-agregar-modal,
+.card-fav-btn,
+.fav-toggle-btn,
+.cart-qty-btn,
+.modal-close,
+.close-cart,
+.close-fav,
+.close-integrated-search,
+.close-search {
+  touch-action: manipulation;
+}
+
+/* 2. GPU compositing — cart sidebar anima con transform,
+      forzar capa propia para que no bloquee el hilo principal */
+.cart-sidebar {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 3. GPU compositing — modal overlay */
+.modal-overlay {
+  will-change: opacity, visibility;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 4. GPU compositing — mobile bottom nav */
+.mobile-bottom-nav {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 5. Scroll momentum iOS (efecto "inercia" al desplazarse dentro de overlays) */
+.cart-items,
+.modal-container,
+.fav-container,
+.fav-content {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain; /* evita que el scroll "escape" al body */
+}
+
+/* 6. Evita el rubber-band del body cuando hay un overlay encima */
+.modal-overlay.open ~ *,
+.cart-overlay.open ~ * {
+  overscroll-behavior: none;
+}
+
+/* 7. Feedback táctil inmediato al presionar tarjetas (móvil) */
+@media (hover: none) and (pointer: coarse) {
+  .card:active {
+    transform: scale(0.97);
+    transition: transform 0.12s ease;
+  }
+
+  .btn-ver-detalle:active,
+  .btn-agregar-modal:active,
+  .filtro-btn:active {
+    transform: scale(0.95);
+    opacity: 0.85;
+    transition: transform 0.1s ease, opacity 0.1s ease;
+  }
+
+  .nav-item:active,
+  .nav-cart-btn-pill:active {
+    transform: scale(0.85);
+    transition: transform 0.1s ease;
+  }
+
+  .ml-btn:active {
+    transform: scale(0.94);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* 8. Suavizar el render de imágenes en todos los dispositivos */
+img {
+  image-rendering: -webkit-optimize-contrast; /* Nitidez en Retina/iOS */
+}
+
+/* 9. Asegurar que -webkit-backdrop-filter esté en el header (Safari iOS) */
+header {
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* 10. Mejor curva de easing para el cart sidebar (más natural) */
+.cart-sidebar {
+  transition: transform 0.42s cubic-bezier(0.32, 0, 0.15, 1);
+}
+
+/* 11. Optimización: reducir animaciones pesadas en dispositivos de bajo rendimiento */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .modal-overlay,
+  .cart-sidebar,
+  .mobile-bottom-nav,
+  .fav-container,
+  .toast-mensaje {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

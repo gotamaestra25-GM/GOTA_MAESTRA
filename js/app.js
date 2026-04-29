@@ -812,28 +812,38 @@ function setActiveNavItem(id) {
 
 // ========== ANIMATIONS AND PREMIUM EFFECTS ==========
 let lastScrollY = 0;
+let scrollTicking = false;
+const cachedHeader = document.querySelector('header'); // cache para no re-querier cada scroll
+
 window.addEventListener('scroll', () => {
-  const header = document.querySelector('header');
-  const currentScrollY = window.scrollY;
+  // requestAnimationFrame asegura que los cambios al DOM
+  // ocurran una vez por frame (60fps) sin bloquear el scroll nativo
+  if (!scrollTicking) {
+    requestAnimationFrame(() => {
+      const currentScrollY = window.scrollY;
 
-  if (currentScrollY > 50) {
-    header.classList.add('header-scrolled');
-  } else {
-    header.classList.remove('header-scrolled');
+      if (currentScrollY > 50) {
+        cachedHeader.classList.add('header-scrolled');
+      } else {
+        cachedHeader.classList.remove('header-scrolled');
+      }
+
+      const homeBtn = document.getElementById('mobileHomeBtn');
+      if (homeBtn && homeBtn.classList.contains('active')) {
+        if (currentScrollY > 100) {
+          homeBtn.classList.add('scrolled');
+          homeBtn.classList.add('was-scrolled');
+        } else {
+          homeBtn.classList.remove('scrolled');
+        }
+      }
+
+      lastScrollY = currentScrollY;
+      scrollTicking = false;
+    });
+    scrollTicking = true;
   }
-
-  const homeBtn = document.getElementById('mobileHomeBtn');
-  if (homeBtn && homeBtn.classList.contains('active')) {
-    if (currentScrollY > 100) {
-      homeBtn.classList.add('scrolled');
-      homeBtn.classList.add('was-scrolled'); // persiste para activar la animación de drenado
-    } else {
-      homeBtn.classList.remove('scrolled');
-    }
-  }
-
-  lastScrollY = currentScrollY;
-});
+}, { passive: true }); // passive: el browser no espera preventDefault, scroll nativo más fluido
 
 // Intersection Observer para animaciones
 const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
