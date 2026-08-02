@@ -138,13 +138,13 @@ function renderModalContent() {
     ).join('');
   }
 
+  const fallbackModal = `<div class="img-fallback" style="display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:16px;"><div style="font-size:0.65rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:3px 10px; border-radius:20px;">${currentModalProduct.nombre.substring(0, 14)}</div></div>`;
   let imgHtml = '';
   if (currentModalProduct.imgPath) {
     const srcEncoded = currentModalProduct.imgPath.replace(/ /g, '%20');
-    imgHtml = `<img src="${srcEncoded}" alt="${escapeHtml(currentModalProduct.nombre)}" style="width:100%; height:100%; object-fit:contain; padding:8px;" onerror="this.style.display='none'; this.nextSibling.style.display='flex';">`;
-    imgHtml += `<div style="display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:16px;"><div style="font-size:0.65rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:3px 10px; border-radius:20px;">${currentModalProduct.nombre.substring(0, 14)}</div></div>`;
+    imgHtml = `<img src="${srcEncoded}" alt="${escapeHtml(currentModalProduct.nombre)}" style="width:100%; height:100%; object-fit:contain; padding:8px;" onerror="this.style.display='none'; this.parentElement.querySelector('.img-fallback').style.display='flex';">${fallbackModal}`;
   } else {
-    imgHtml = `<div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:16px;"><div style="font-size:0.65rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:3px 10px; border-radius:20px;">${currentModalProduct.nombre.substring(0, 14)}</div></div>`;
+    imgHtml = `<div class="img-fallback" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:16px;"><div style="font-size:0.65rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:3px 10px; border-radius:20px;">${currentModalProduct.nombre.substring(0, 14)}</div></div>`;
   }
 
   const isFav = favorites.some(f => f.id === currentModalProduct.id);
@@ -215,12 +215,12 @@ function renderProducts() {
     const emoji = prod.genero === 'caballero' ? '👔' : '👗';
 
     let imgBlock = "";
+    const fallbackCard = `<div class="img-fallback" style="width:100%; height:100%; display:none; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;"><div style="font-size:3.5rem; filter:drop-shadow(2px 4px 6px rgba(0,0,0,0.2));">${emoji}</div><div style="font-size:0.7rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">${prod.nombre.substring(0, 18)}</div></div>`;
     if (prod.imgPath) {
       const srcEncoded = prod.imgPath.replace(/ /g, '%20');
-      imgBlock = `<img src="${srcEncoded}" alt="${escapeHtml(prod.nombre)}" style="width:100%; height:100%; object-fit:contain; padding:16px;" onerror="this.style.display='none'; this.nextSibling.style.display='flex';">`;
-      imgBlock += `<div style="width:100%; height:100%; display:none; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;"><div style="font-size:3.5rem; filter:drop-shadow(2px 4px 6px rgba(0,0,0,0.2));">${emoji}</div><div style="font-size:0.7rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">${prod.nombre.substring(0, 18)}</div></div>`;
+      imgBlock = `<img src="${srcEncoded}" alt="${escapeHtml(prod.nombre)}" style="width:100%; height:100%; object-fit:contain; padding:16px;" onerror="this.style.display='none'; this.parentElement.querySelector('.img-fallback').style.display='flex';">${fallbackCard}`;
     } else {
-      imgBlock = `<div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;"><div style="font-size:3.5rem;">${emoji}</div><div style="font-size:0.7rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">${prod.nombre.substring(0, 18)}</div></div>`;
+      imgBlock = `<div class="img-fallback" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;"><div style="font-size:3.5rem;">${emoji}</div><div style="font-size:0.7rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">${prod.nombre.substring(0, 18)}</div></div>`;
     }
 
     const isFav = favorites.some(f => f.id === prod.id);
