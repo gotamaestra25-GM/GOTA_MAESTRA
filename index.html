@@ -27,13 +27,11 @@
       </div>
       <div class="nav-links">
         <a href="#catalogo">Catálogo</a>
-        <a href="#" id="navUsuarioBtn" onclick="openLoginModal(); return false;">Usuario</a>
       </div>
       <button class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></button>
     </div>
     <div class="mobile-nav" id="mobileNav">
       <a href="#catalogo" onclick="closeMobile()">Catálogo</a>
-      <a href="#" id="mobileNavUsuarioBtn" onclick="closeMobile(); openLoginModal(); return false;">Usuario</a>
     </div>
   </header>
 
@@ -79,131 +77,6 @@
       <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
-
-  <!-- ==================== LOGIN MODAL ==================== -->
-  <div class="login-overlay" id="loginOverlay">
-    <div class="login-modal">
-      <button class="login-close-btn" id="closeLoginBtn">&times;</button>
-      <div class="login-header">
-        <div class="login-icon" style="margin-bottom:10px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
-        <h2>Acceso de Administrador</h2>
-        <p>Ingresa tus credenciales para entrar al modo editor</p>
-      </div>
-      <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
-        <div class="login-field">
-          <label for="loginUser">Usuario</label>
-          <div class="input-wrapper">
-            <span class="input-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
-            <input type="text" id="loginUser" placeholder="Nombre de usuario" autocomplete="username">
-          </div>
-        </div>
-        <div class="login-field">
-          <label for="loginPass">Contraseña</label>
-          <div class="input-wrapper">
-            <span class="input-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
-            <input type="password" id="loginPass" placeholder="Contraseña" autocomplete="current-password">
-            <button type="button" class="toggle-pass" id="togglePass" onclick="togglePasswordVisibility()" style="font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Ver</button>
-          </div>
-        </div>
-        <div class="login-error" id="loginError" style="display:none;">
-          Usuario o contraseña incorrectos
-        </div>
-        <button type="submit" class="login-submit-btn">
-          <span>Ingresar</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- ==================== ADMIN PANEL - AGREGAR/EDITAR FRAGANCIA ==================== -->
-  <div class="admin-panel-overlay" id="adminPanelOverlay">
-    <div class="admin-panel">
-      <div class="admin-panel-header">
-        <h2 id="adminPanelTitle">Agregar Fragancia</h2>
-        <button class="admin-panel-close" id="closeAdminPanelBtn">&times;</button>
-      </div>
-
-      <div class="admin-panel-body">
-        <!-- Columna izquierda: Formulario -->
-        <div class="admin-form-col">
-          <form id="adminFragranceForm">
-            <input type="hidden" id="editingProductId">
-
-            <div class="form-group">
-              <label>Nombre de la Fragancia *</label>
-              <input type="text" id="adminNombre" placeholder="Ej: Bleu de Chanel" required>
-            </div>
-
-            <div class="form-group">
-              <label>Género *</label>
-              <select id="adminGenero" required>
-                <option value="">Selecciona...</option>
-                <option value="dama">Dama</option>
-                <option value="caballero">Caballero</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Imagen de la Fragancia</label>
-              <div class="image-upload-area" id="imageUploadArea">
-                <input type="file" id="adminImagen" accept="image/*,.avif,.webp,.jpg,.jpeg,.png,.gif,.svg,.bmp,.tiff" style="display:none;">
-                <div class="upload-placeholder" id="uploadPlaceholder" onclick="document.getElementById('adminImagen').click()">
-                  <span class="upload-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>
-                  <span>Haz clic para subir imagen</span>
-                  <small>AVIF, WebP, JPG, PNG, GIF, SVG y más</small>
-                </div>
-                <img id="adminImagePreviewImg" src="" alt="Vista previa" style="display:none; max-width:100%; max-height:160px; object-fit:contain; border-radius:12px;">
-                <button type="button" id="removeImageBtn" style="display:none;" onclick="removeAdminImage()" class="remove-img-btn">✕ Quitar imagen</button>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>Acordes Principales (hasta 5)</label>
-              <div id="acordesContainer">
-                <!-- se renderiza dinámicamente -->
-              </div>
-              <button type="button" class="add-acorde-btn" id="addAcordeBtn" onclick="addAcordeRow()">+ Agregar Acorde</button>
-            </div>
-
-            <div class="admin-form-actions">
-              <button type="button" class="btn-cancel-admin" onclick="closeAdminPanel()">Cancelar</button>
-              <button type="submit" class="btn-save-admin" id="saveFragranceBtn">
-                <span>Guardar Fragancia</span>
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Columna derecha: Vista previa -->
-        <div class="admin-preview-col">
-          <div class="preview-label">Vista Previa</div>
-          <div class="preview-card-wrapper">
-            <div class="card preview-card" id="previewCard">
-              <div class="card-img" id="previewCardImg">
-                <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;">
-                  <div style="font-size:0.8rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">Tu Fragancia</div>
-                </div>
-                <div class="badge-gen">Inspiraciones Premium</div>
-              </div>
-              <div class="card-body">
-                <div class="card-genero" id="previewGenero">Género</div>
-                <div class="card-nombre" id="previewNombre">Nombre de la Fragancia</div>
-                <button class="btn-ver-detalle">Ver acordes</button>
-              </div>
-            </div>
-          </div>
-          <div class="preview-acordes-label">Acordes configurados:</div>
-          <div id="previewAcordes" class="preview-acordes-list"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Botón flotante agregar fragancia (solo admin) -->
-  <button class="floating-add-btn" id="floatingAddBtn" style="display:none;" onclick="openAdminPanel()">
-    ＋
-  </button>
 
   <!-- Favorites Drawer/Overlay -->
   <div class="fav-overlay" id="favOverlay">
@@ -273,14 +146,6 @@
           </button>
         </div>
         <div class="pill-right">
-          <button class="nav-item" id="mobileUserBtn" onclick="openLoginModal()">
-            <span class="nav-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </button>
         </div>
       </div>
     </div>
