@@ -46,6 +46,17 @@ function escapeHtml(str) {
   });
 }
 
+// Global error handler for images to prevent WebKit parser aborts
+window.handleImgError = function(img, fallbackSelector) {
+  img.style.display = 'none';
+  setTimeout(() => {
+    if (img.parentElement) {
+      const fallback = img.parentElement.querySelector(fallbackSelector || '.img-fallback');
+      if (fallback) fallback.style.display = 'flex';
+    }
+  }, 0);
+};
+
 function showToast(mensaje) {
   let toastContainer = document.getElementById('toastContainer');
   if (!toastContainer) {
@@ -142,7 +153,7 @@ function renderModalContent() {
   let imgHtml = '';
   if (currentModalProduct.imgPath) {
     const srcEncoded = currentModalProduct.imgPath.replace(/ /g, '%20');
-    imgHtml = `<img src="${srcEncoded}" alt="${escapeHtml(currentModalProduct.nombre)}" style="width:100%; height:100%; object-fit:contain; padding:8px;" onerror="this.style.display='none'; this.parentElement.querySelector('.img-fallback').style.display='flex';">${fallbackModal}`;
+    imgHtml = `<img src="${srcEncoded}" alt="${escapeHtml(currentModalProduct.nombre)}" style="width:100%; height:100%; object-fit:contain; padding:8px;" onerror="handleImgError(this, '.img-fallback')">${fallbackModal}`;
   } else {
     imgHtml = `<div class="img-fallback" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:16px;"><div style="font-size:0.65rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:3px 10px; border-radius:20px;">${currentModalProduct.nombre.substring(0, 14)}</div></div>`;
   }
@@ -218,7 +229,7 @@ function renderProducts() {
     const fallbackCard = `<div class="img-fallback" style="width:100%; height:100%; display:none; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;"><div style="font-size:3.5rem; filter:drop-shadow(2px 4px 6px rgba(0,0,0,0.2));">${emoji}</div><div style="font-size:0.7rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">${prod.nombre.substring(0, 18)}</div></div>`;
     if (prod.imgPath) {
       const srcEncoded = prod.imgPath.replace(/ /g, '%20');
-      imgBlock = `<img src="${srcEncoded}" alt="${escapeHtml(prod.nombre)}" style="width:100%; height:100%; object-fit:contain; padding:16px;" onerror="this.style.display='none'; this.parentElement.querySelector('.img-fallback').style.display='flex';">${fallbackCard}`;
+      imgBlock = `<img src="${srcEncoded}" alt="${escapeHtml(prod.nombre)}" style="width:100%; height:100%; object-fit:contain; padding:16px;" onerror="handleImgError(this, '.img-fallback')">${fallbackCard}`;
     } else {
       imgBlock = `<div class="img-fallback" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;"><div style="font-size:3.5rem;">${emoji}</div><div style="font-size:0.7rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">${prod.nombre.substring(0, 18)}</div></div>`;
     }
@@ -318,7 +329,7 @@ function renderFavorites() {
     if (imgSrc) imgSrc = imgSrc.replace(/ /g, '%20');
     const fallbackFav = `<div class="fav-img-fallback" style="display:none; width:65px; height:65px; background:white; border-radius:12px; align-items:center; justify-content:center; font-size:1.5rem;">${emoji}</div>`;
     const imgHtml = imgSrc ?
-      `<img src="${imgSrc}" style="width:65px; height:65px; object-fit:contain; background:white; border-radius:12px; padding:4px;" onerror="this.style.display='none'; this.parentElement.querySelector('.fav-img-fallback').style.display='flex';">${fallbackFav}` :
+      `<img src="${imgSrc}" style="width:65px; height:65px; object-fit:contain; background:white; border-radius:12px; padding:4px;" onerror="handleImgError(this, '.fav-img-fallback')">${fallbackFav}` :
       `<div style="width:65px; height:65px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">${emoji}</div>`;
     html += `
       <div style="background:rgba(255,255,255,0.7); backdrop-filter:blur(4px); border:1px solid rgba(0,0,0,0.03); margin-bottom:12px; padding:12px; border-radius:20px; display:flex; align-items:center; gap:15px; position:relative; transition:all 0.3s ease;">
