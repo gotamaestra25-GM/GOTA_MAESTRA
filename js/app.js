@@ -5,6 +5,7 @@ const ADMIN_PASS = 'Admin123';
 // ========== INICIALIZACIÓN DE PRODUCTOS ==========
 let allProducts = [];
 let deletedProducts = [];
+let customProducts = [];
 
 function loadCustomProducts() {
   const saved = localStorage.getItem('customFragrancesGM');
