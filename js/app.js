@@ -316,8 +316,9 @@ function renderFavorites() {
     const emoji = prod.genero === 'caballero' ? '👔' : '👗';
     let imgSrc = prod.imgPath || '';
     if (imgSrc) imgSrc = imgSrc.replace(/ /g, '%20');
+    const fallbackFav = `<div class="fav-img-fallback" style="display:none; width:65px; height:65px; background:white; border-radius:12px; align-items:center; justify-content:center; font-size:1.5rem;">${emoji}</div>`;
     const imgHtml = imgSrc ?
-      `<img src="${imgSrc}" style="width:65px; height:65px; object-fit:contain; background:white; border-radius:12px; padding:4px;" onerror="this.style.display='none'">` :
+      `<img src="${imgSrc}" style="width:65px; height:65px; object-fit:contain; background:white; border-radius:12px; padding:4px;" onerror="this.style.display='none'; this.parentElement.querySelector('.fav-img-fallback').style.display='flex';">${fallbackFav}` :
       `<div style="width:65px; height:65px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">${emoji}</div>`;
     html += `
       <div style="background:rgba(255,255,255,0.7); backdrop-filter:blur(4px); border:1px solid rgba(0,0,0,0.03); margin-bottom:12px; padding:12px; border-radius:20px; display:flex; align-items:center; gap:15px; position:relative; transition:all 0.3s ease;">
