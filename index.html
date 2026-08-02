@@ -25,14 +25,15 @@
           <p>Inspiraciones Premium</p>
         </div>
       </div>
-      <div class="nav-links"><a href="#catalogo">Catálogo</a><a href="#contacto">Contacto</a></div>
-      <div class="cart-icon" id="cartIconBtn"><span>Mi pedido</span><span class="cart-count" id="cartCount">0</span>
+      <div class="nav-links">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#" id="navUsuarioBtn" onclick="openLoginModal(); return false;">Usuario</a>
       </div>
       <button class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></button>
     </div>
     <div class="mobile-nav" id="mobileNav">
       <a href="#catalogo" onclick="closeMobile()">Catálogo</a>
-      <a href="#contacto" onclick="closeMobile()">Contacto</a>
+      <a href="#" id="mobileNavUsuarioBtn" onclick="closeMobile(); openLoginModal(); return false;">Usuario</a>
     </div>
   </header>
 
@@ -52,8 +53,8 @@
 
   <div class="filtros-wrapper">
     <div class="filtros-bar">
-      <div class="search-box"><span>🔍</span><input type="text" id="searchInput"
-          placeholder="Buscar loción... ej: Bleu de Chanel, One Million..."><span id="clearSearch" class="clear-search" style="display:none;">&times;</span></div>
+      <div class="search-box"><span class="search-icon"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span><input type="text" id="searchInput"
+          placeholder="Buscar loción..."><span id="clearSearch" class="clear-search" style="display:none;">&times;</span></div>
       <div class="filtro-group"><button class="filtro-btn active" data-genero="todos">Todos</button><button
           class="filtro-btn" data-genero="caballero">Caballero</button><button class="filtro-btn"
           data-genero="dama">Dama</button></div>
@@ -69,6 +70,7 @@
     <div class="productos-grid" id="productosGrid"></div>
   </div>
 
+  <!-- Modal de detalles de fragancia -->
   <div class="modal-overlay" id="productModal">
     <div class="modal-container">
       <div class="modal-header">
@@ -78,65 +80,151 @@
     </div>
   </div>
 
-  <div class="cart-overlay" id="cartOverlay"></div>
-  <div class="cart-sidebar" id="cartSidebar">
-    <div class="cart-header">
-      <h3>Tu pedido</h3><button class="close-cart" id="closeCartBtn">&times;</button>
-    </div>
-    <div class="cart-items" id="cartItemsList">
-      <div style="text-align:center;padding:30px;">Carrito vacío</div>
-    </div>
-    <div class="cart-total"
-      style="background: rgba(255, 255, 255, 0.85); border-radius: 20px; padding: 20px; margin: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.8);">
-      <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; color: var(--texto);">Resumen del Pedido</h4>
-
-      <div style="display:flex;justify-content:space-between; font-size: 0.85rem; color: var(--texto-suave);">
-        <span>Subtotal</span>
-        <span id="cartSubtotalPrice">L. 0</span>
+  <!-- ==================== LOGIN MODAL ==================== -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-modal">
+      <button class="login-close-btn" id="closeLoginBtn">&times;</button>
+      <div class="login-header">
+        <div class="login-icon" style="margin-bottom:10px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+        <h2>Acceso de Administrador</h2>
+        <p>Ingresa tus credenciales para entrar al modo editor</p>
       </div>
-
-      <div style="display:flex;justify-content:space-between; font-size: 0.85rem; color: var(--texto-suave);">
-        <span>Envío estimado</span>
-        <span style="color: #25d366; font-weight: 600;">No incluido</span>
-      </div>
-
-      <hr style="border: none; border-top: 1px solid rgba(212, 188, 160, 0.3); margin: 8px 0;">
-
-      <div
-        style="display:flex;justify-content:space-between; align-items: center; font-weight:700; font-size:1.25rem; color:var(--primario-oscuro);">
-        <span>Total</span>
-        <span id="cartTotalPrice">L. 0</span>
-      </div>
-
-      <button class="btn-whatsapp-cart" id="sendWhatsappBtn"
-        style="margin-top: 12px; font-size: 0.95rem; padding: 14px; border-radius: 12px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);">Proceder
-        al pedido (WhatsApp)</button>
-      <button class="vaciar-btn" id="clearCartBtn"
-        style="border: none; background: transparent; color: #a3a3a3; font-size: 0.8rem; text-decoration: underline; margin-top: 4px;">Vaciar
-        carrito</button>
+      <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+        <div class="login-field">
+          <label for="loginUser">Usuario</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+            <input type="text" id="loginUser" placeholder="Nombre de usuario" autocomplete="username">
+          </div>
+        </div>
+        <div class="login-field">
+          <label for="loginPass">Contraseña</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+            <input type="password" id="loginPass" placeholder="Contraseña" autocomplete="current-password">
+            <button type="button" class="toggle-pass" id="togglePass" onclick="togglePasswordVisibility()" style="font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Ver</button>
+          </div>
+        </div>
+        <div class="login-error" id="loginError" style="display:none;">
+          Usuario o contraseña incorrectos
+        </div>
+        <button type="submit" class="login-submit-btn">
+          <span>Ingresar</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </form>
     </div>
   </div>
 
-  <section id="contacto" style="padding:48px 24px;text-align:center;">
-    <h3 style="font-family:'Playfair Display';font-size:1.6rem;">¿Dudas o pedido especial?</h3>
-    <p style="margin:12px 0;">Escríbenos directamente a nuestro WhatsApp para atención personalizada.</p>
-    <a href="https://wa.me/50431529980?text=Hola%20Gota%20Maestra%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20fragancias%20y%20productos.%20%C2%BFPodr%C3%ADan%20ayudarme%3F"
-      target="_blank"
-      style="background:#25d366;color:white;padding:12px 28px;border-radius:40px;text-decoration:none;display:inline-flex;gap:12px;">
-      +504 3152-9980 · WhatsApp</a>
-  </section>
+  <!-- ==================== ADMIN PANEL - AGREGAR/EDITAR FRAGANCIA ==================== -->
+  <div class="admin-panel-overlay" id="adminPanelOverlay">
+    <div class="admin-panel">
+      <div class="admin-panel-header">
+        <h2 id="adminPanelTitle">Agregar Fragancia</h2>
+        <button class="admin-panel-close" id="closeAdminPanelBtn">&times;</button>
+      </div>
 
-  <footer>
-    <p>© 2025 GOTA MAESTRA HN – Inspiraciones premium de calidad. Envíos a nivel nacional.</p>
-    <p style="font-size:0.7rem; margin-top: 5px;">Todos los nombres de marca son referencias de inspiración. No somos propietarios de marcas originales.</p>
-    <p style="font-size:0.75rem; margin-top: 15px;"><a href="seguridad.html" style="color: var(--texto-suave); text-decoration: underline;">Política de Privacidad y Seguridad</a></p>
-  </footer>
+      <div class="admin-panel-body">
+        <!-- Columna izquierda: Formulario -->
+        <div class="admin-form-col">
+          <form id="adminFragranceForm">
+            <input type="hidden" id="editingProductId">
 
-  <!-- Botón flotante del carrito (Desktop/Default) -->
-  <button class="floating-cart-btn" id="floatingCartBtn" onclick="openCartSidebar()">
-    🛒
-    <span class="floating-cart-count" id="floatingCartCount">0</span>
+            <div class="form-group">
+              <label>Nombre de la Fragancia *</label>
+              <input type="text" id="adminNombre" placeholder="Ej: Bleu de Chanel" required>
+            </div>
+
+            <div class="form-group">
+              <label>Género *</label>
+              <select id="adminGenero" required>
+                <option value="">Selecciona...</option>
+                <option value="dama">Dama</option>
+                <option value="caballero">Caballero</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Imagen de la Fragancia</label>
+              <div class="image-upload-area" id="imageUploadArea">
+                <input type="file" id="adminImagen" accept="image/*,.avif,.webp,.jpg,.jpeg,.png,.gif,.svg,.bmp,.tiff" style="display:none;">
+                <div class="upload-placeholder" id="uploadPlaceholder" onclick="document.getElementById('adminImagen').click()">
+                  <span class="upload-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>
+                  <span>Haz clic para subir imagen</span>
+                  <small>AVIF, WebP, JPG, PNG, GIF, SVG y más</small>
+                </div>
+                <img id="adminImagePreviewImg" src="" alt="Vista previa" style="display:none; max-width:100%; max-height:160px; object-fit:contain; border-radius:12px;">
+                <button type="button" id="removeImageBtn" style="display:none;" onclick="removeAdminImage()" class="remove-img-btn">✕ Quitar imagen</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Acordes Principales (hasta 5)</label>
+              <div id="acordesContainer">
+                <!-- se renderiza dinámicamente -->
+              </div>
+              <button type="button" class="add-acorde-btn" id="addAcordeBtn" onclick="addAcordeRow()">+ Agregar Acorde</button>
+            </div>
+
+            <div class="admin-form-actions">
+              <button type="button" class="btn-cancel-admin" onclick="closeAdminPanel()">Cancelar</button>
+              <button type="submit" class="btn-save-admin" id="saveFragranceBtn">
+                <span>Guardar Fragancia</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Columna derecha: Vista previa -->
+        <div class="admin-preview-col">
+          <div class="preview-label">Vista Previa</div>
+          <div class="preview-card-wrapper">
+            <div class="card preview-card" id="previewCard">
+              <div class="card-img" id="previewCardImg">
+                <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;">
+                  <div style="font-size:0.8rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">Tu Fragancia</div>
+                </div>
+                <div class="badge-gen">Inspiraciones Premium</div>
+              </div>
+              <div class="card-body">
+                <div class="card-genero" id="previewGenero">Género</div>
+                <div class="card-nombre" id="previewNombre">Nombre de la Fragancia</div>
+                <button class="btn-ver-detalle">Ver acordes</button>
+              </div>
+            </div>
+          </div>
+          <div class="preview-acordes-label">Acordes configurados:</div>
+          <div id="previewAcordes" class="preview-acordes-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón flotante agregar fragancia (solo admin) -->
+  <button class="floating-add-btn" id="floatingAddBtn" style="display:none;" onclick="openAdminPanel()">
+    ＋
   </button>
+
+  <!-- Favorites Drawer/Overlay -->
+  <div class="fav-overlay" id="favOverlay">
+    <div class="fav-container">
+      <div class="fav-header">
+        <h3>Tus Favoritos</h3>
+        <button class="close-fav" id="closeFavBtn">&times;</button>
+      </div>
+      <div class="fav-content" id="favList">
+        <p style="text-align:center; padding: 40px; color: var(--texto-suave);">No tienes favoritos aún ❤️</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Search Overlay (Root Level) -->
+  <div class="mobile-search-overlay" id="mobileSearchOverlay">
+    <div class="search-overlay-header">
+      <input type="text" id="mobileSearchInput" placeholder="¿Qué aroma buscas hoy?">
+      <button class="close-search" id="closeMobileSearch">&times;</button>
+    </div>
+  </div>
 
   <!-- Mobile Bottom Navigation (Liquid Glass Style) -->
   <nav class="mobile-bottom-nav">
@@ -185,41 +273,24 @@
           </button>
         </div>
         <div class="pill-right">
-          <button class="nav-cart-btn-pill" id="mobileCartBtn" onclick="openCartSidebar()">
+          <button class="nav-item" id="mobileUserBtn" onclick="openLoginModal()">
             <span class="nav-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="9" cy="21" r="1" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="20" cy="21" r="1" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M1 1H5L7.68 14.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
-            <span class="cart-badge" id="mobileNavCartCount">0</span>
           </button>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Favorites Drawer/Overlay -->
-  <div class="fav-overlay" id="favOverlay">
-    <div class="fav-container">
-      <div class="fav-header">
-        <h3>Tus Favoritos</h3>
-        <button class="close-fav" id="closeFavBtn">&times;</button>
-      </div>
-      <div class="fav-content" id="favList">
-        <p style="text-align:center; padding: 40px; color: var(--texto-suave);">No tienes favoritos aún ❤️</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Mobile Search Overlay (Root Level) -->
-  <div class="mobile-search-overlay" id="mobileSearchOverlay">
-    <div class="search-overlay-header">
-      <input type="text" id="mobileSearchInput" placeholder="¿Qué aroma buscas hoy?">
-      <button class="close-search" id="closeMobileSearch">&times;</button>
-    </div>
-  </div>
+  <footer>
+    <p>© 2025 GOTA MAESTRA HN – Inspiraciones premium de calidad. Envíos a nivel nacional.</p>
+    <p style="font-size:0.7rem; margin-top: 5px;">Todos los nombres de marca son referencias de inspiración. No somos propietarios de marcas originales.</p>
+    <p style="font-size:0.75rem; margin-top: 15px;"><a href="seguridad.html" style="color: var(--texto-suave); text-decoration: underline;">Política de Privacidad y Seguridad</a></p>
+  </footer>
 
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
