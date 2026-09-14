@@ -1366,26 +1366,19 @@ footer {
 
 /* ====================================================
    ESTADO MINIMIZADO — Instagram iOS style
-   La barra baja de alto, las labels desaparecen,
-   los iconos se reducen un poco.
+   La barra baja de alto, se hace menos ancha,
+   y los iconos se reducen un poco.
    ==================================================== */
 .mobile-bottom-nav.nav-minimized .nav-pill-container {
   min-height: 44px;
+  max-width: 240px;
   padding: 6px 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-/* Ocultar labels al minimizar */
-.mobile-bottom-nav.nav-minimized .nav-label {
-  max-height: 0;
-  opacity: 0;
-  margin-top: 0;
 }
 
 /* Comprimir el padding vertical del botón */
 .mobile-bottom-nav.nav-minimized .nav-item {
   padding: 6px 10px;
-  gap: 0;
 }
 
 /* Reducir ligeramente los iconos */
@@ -1457,38 +1450,16 @@ footer {
   background: transparent;
   border: none;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8px 10px 6px;
+  padding: 10px;
   border-radius: 50px;
   cursor: pointer;
   color: #000 !important;
-  gap: 3px;
   transition:
     padding        0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    gap            0.35s cubic-bezier(0.4, 0, 0.2, 1),
     transform      0.35s cubic-bezier(0.4, 0, 0.2, 1),
     background     0.2s ease;
-}
-
-/* Etiqueta de texto bajo el icóno */
-.nav-label {
-  font-size: 10px;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.2px;
-  color: #333;
-  white-space: nowrap;
-  /* Transición de aparición/desaparición suave */
-  max-height: 14px;
-  opacity: 1;
-  overflow: hidden;
-  transition:
-    max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity    0.25s ease,
-    margin-top 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: none;
 }
 
 .nav-icon {
