@@ -1275,8 +1275,8 @@ footer {
   pointer-events: none;
   transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s ease, opacity 0.4s ease;
   will-change: bottom, top, transform;
-  /* Altura limitada para no cubrir contenido */
-  height: auto;
+  /* Altura FIJA para evitar saltos/bruzquedades cuando la píldora se encoge */
+  height: 60px;
 }
 
 /* FIX: Asegurar que TODOS los botones dentro de la nav reciben clics */
@@ -1331,6 +1331,7 @@ footer {
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%; /* Ocupa el alto fijo para centrar la píldora perfectamente */
   /* Solo el contenedor de la barra recibe eventos touch, no el espacio vacío */
   pointer-events: auto;
 }
