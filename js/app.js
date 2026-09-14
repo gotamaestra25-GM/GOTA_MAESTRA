@@ -641,27 +641,61 @@ function setActiveNavItem(id) {
 // ========== SCROLL Y ANIMACIONES ==========
 const cachedHeader = document.querySelector('header');
 
+// --- Instagram-style nav minimize ---
+let lastScrollY = window.scrollY;
+let navExpandTimer = null;
+const bottomNav = document.querySelector('.mobile-bottom-nav');
+
 window.addEventListener('scroll', () => {
   requestAnimationFrame(() => {
     const currentScrollY = window.scrollY;
+
+    // Header scroll class
     if (cachedHeader) {
-      if (currentScrollY > 50) {
-        cachedHeader.classList.add('header-scrolled');
-      } else {
-        cachedHeader.classList.remove('header-scrolled');
-      }
+      cachedHeader.classList.toggle('header-scrolled', currentScrollY > 50);
     }
+
+    // Home btn water effect
     const homeBtn = document.getElementById('mobileHomeBtn');
     if (homeBtn && homeBtn.classList.contains('active')) {
       if (currentScrollY > 100) {
-        homeBtn.classList.add('scrolled');
-        homeBtn.classList.add('was-scrolled');
+        homeBtn.classList.add('scrolled', 'was-scrolled');
       } else {
         homeBtn.classList.remove('scrolled');
       }
     }
+
+    // ── Instagram iOS nav minimize ──────────────────────────────
+    if (bottomNav && !bottomNav.classList.contains('search-active')) {
+      const delta = currentScrollY - lastScrollY;
+
+      if (delta > 4 && currentScrollY > 80) {
+        // Scrolling DOWN — minimizar
+        bottomNav.classList.add('nav-minimized');
+        // Cancelar timer de expansión si existía
+        if (navExpandTimer) { clearTimeout(navExpandTimer); navExpandTimer = null; }
+      } else if (delta < -4 || currentScrollY < 80) {
+        // Scrolling UP o cerca del top — expandir inmediatamente
+        bottomNav.classList.remove('nav-minimized');
+        if (navExpandTimer) { clearTimeout(navExpandTimer); navExpandTimer = null; }
+      }
+
+      // También expandir si el usuario deja de hacer scroll por 1.2 segundos
+      if (bottomNav.classList.contains('nav-minimized')) {
+        if (navExpandTimer) clearTimeout(navExpandTimer);
+        navExpandTimer = setTimeout(() => {
+          bottomNav.classList.remove('nav-minimized');
+          navExpandTimer = null;
+        }, 1200);
+      }
+    }
+    // ────────────────────────────────────────────────────────────
+
+    lastScrollY = currentScrollY;
   });
 }, { passive: true });
+
+
 
 // ========== INTERSECTION OBSERVER PARA ANIMACIÓN DE CARDS ==========
 // FIX: Desconectar el observer antes de re-crear para evitar observers huérfanos

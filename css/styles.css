@@ -1350,18 +1350,51 @@ footer {
   justify-content: space-between;
   border: none;
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
-  /* Transición suave para la forma y sombra de la píldora */
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.3s ease,
-    border-radius 0.3s ease;
+  transition:
+    width          0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    max-width      0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    padding        0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    min-height     0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow     0.35s ease,
+    border-radius  0.35s ease;
   min-height: 58px;
   width: 92%;
   max-width: 480px;
   margin: 0 auto;
   position: relative;
 }
+
+/* ====================================================
+   ESTADO MINIMIZADO — Instagram iOS style
+   La barra baja de alto, las labels desaparecen,
+   los iconos se reducen un poco.
+   ==================================================== */
+.mobile-bottom-nav.nav-minimized .nav-pill-container {
+  min-height: 44px;
+  padding: 6px 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Ocultar labels al minimizar */
+.mobile-bottom-nav.nav-minimized .nav-label {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+}
+
+/* Comprimir el padding vertical del botón */
+.mobile-bottom-nav.nav-minimized .nav-item {
+  padding: 6px 10px;
+  gap: 0;
+}
+
+/* Reducir ligeramente los iconos */
+.mobile-bottom-nav.nav-minimized .nav-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+  transition: width 0.35s cubic-bezier(0.4,0,0.2,1), height 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
 
 .pill-left,
 .pill-right {
@@ -1424,14 +1457,38 @@ footer {
   background: transparent;
   border: none;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 8px 10px 6px;
   border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
   color: #000 !important;
-  /* Forzado a negro para visibilidad total */
+  gap: 3px;
+  transition:
+    padding        0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    gap            0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform      0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background     0.2s ease;
+}
+
+/* Etiqueta de texto bajo el icóno */
+.nav-label {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.2px;
+  color: #333;
+  white-space: nowrap;
+  /* Transición de aparición/desaparición suave */
+  max-height: 14px;
+  opacity: 1;
+  overflow: hidden;
+  transition:
+    max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity    0.25s ease,
+    margin-top 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
 }
 
 .nav-icon {
