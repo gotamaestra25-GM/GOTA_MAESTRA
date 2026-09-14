@@ -891,8 +891,11 @@ footer {
 /* Animations & Toast */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(22px);
+  /* FIX: Usar visibility además de opacity para evitar huecos visuales */
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  /* CRITICAL: nunca colapsar el espacio — las cards siempre ocupan su lugar */
+  min-height: 0;
 }
 
 .reveal.active {
@@ -900,9 +903,11 @@ footer {
   transform: translateY(0);
 }
 
-/* Safety: make sure cards are always interactable even if reveal hasn't fired */
+/* Safety: cards siempre interactuables y visibles aunque el observer falle */
 .card {
   pointer-events: auto !important;
+  /* Garantía extra: nunca ocultar con display:none */
+  min-height: 0 !important;
 }
 
 .toast-container {
@@ -1272,6 +1277,21 @@ footer {
   will-change: bottom, top, transform;
   /* Altura limitada para no cubrir contenido */
   height: auto;
+}
+
+/* FIX: Asegurar que TODOS los botones dentro de la nav reciben clics */
+.mobile-bottom-nav button,
+.mobile-bottom-nav .nav-item {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: rgba(194, 126, 74, 0.15);
+  touch-action: manipulation;
+}
+
+/* FIX: El nav-container y la píldora también deben recibir eventos */
+.mobile-bottom-nav .nav-container,
+.mobile-bottom-nav .nav-pill-container {
+  pointer-events: auto;
 }
 
 .search-active.mobile-bottom-nav {
@@ -1746,6 +1766,14 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.close-fav:active {
+  transform: scale(0.9);
+  background: #e2e4ea;
 }
 
 .fav-item {
@@ -1833,7 +1861,7 @@ body.search-mode-active .filtros-wrapper {
   transition: opacity 0.2s ease !important;
 }
 
-/* Asegurar que el contenedor de resultados no tenga scroll extraño */
+/* Contenedor de resultados — paginación infinita */
 .productos-grid {
   min-height: 50vh;
 }

@@ -7,17 +7,15 @@ const IMG_BASE_MUJER = "imagenes gmaestra/imagenes catalogo lociones 2026/imag C
 
 const mujerExt = {};
 for (let i = 1; i <= 151; i++) {
-  if (i === 35 || i === 64) mujerExt[i] = 'webp';
-  else if (i === 82) mujerExt[i] = 'jpg';
-  else if (i >= 2 && i <= 28) mujerExt[i] = 'png';
-  else mujerExt[i] = 'avif';
+  if (i === 82) mujerExt[i] = 'jpg';          // archivo original jpg
+  else if (i >= 2 && i <= 28) mujerExt[i] = 'png'; // archivos originales png
+  else mujerExt[i] = 'webp';                   // convertidas de avif a webp
 }
-mujerExt[1] = 'avif';
+mujerExt[1] = 'webp';
 
 const hombreExt = {};
 for (let i = 1; i <= 152; i++) {
-  if (i === 23 || i === 24 || i === 45) hombreExt[i] = 'webp';
-  else hombreExt[i] = 'avif';
+  hombreExt[i] = 'webp'; // todas convertidas de avif a webp
 }
 
 // ========== DAMAS (151 fragancias) ==========

@@ -27,6 +27,12 @@ let currentModalProduct = null;
 let filtroGenero = 'todos';
 let searchDebounceTimer = null;
 
+// ========== PAGINACIÓN VIRTUAL ==========
+const PAGE_SIZE = 36;        // Cards por lote
+let currentPage = 0;         // Lote actual renderizado
+let filteredProducts = [];   // Productos filtrados actuales
+let isLoadingPage = false;   // Evita cargas solapadas durante el scroll
+
 // ========== DOM ELEMENTS ==========
 const modalOverlay = document.getElementById('productModal');
 const modalBody = document.getElementById('modalBody');
@@ -200,88 +206,163 @@ function renderModalContent() {
   });
 }
 
-// ========== RENDERIZADO DE PRODUCTOS ==========
+// ========== RENDERIZADO DE PRODUCTOS (con paginación virtual + lazy loading) ==========
+
+/**
+ * Genera el HTML de una card individual con lazy loading nativo.
+ * El primer lote (isFirstBatch=true) usa loading="eager" para las primeras cards
+ * visibles sin scroll; el resto usa loading="lazy".
+ */
+function buildCardHtml(prod, index, isFirstBatch) {
+  const generoLabel = prod.genero === 'caballero' ? 'Caballero' : 'Dama';
+  const emoji = prod.genero === 'caballero' ? '\u{1F454}' : '\u{1F457}';
+  const lazyAttr = (isFirstBatch && index < 12) ? 'loading="eager"' : 'loading="lazy"';
+
+  const fallbackCard = `<div class="img-fallback" style="width:100%; height:100%; display:none; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;"><div style="font-size:3.5rem; filter:drop-shadow(2px 4px 6px rgba(0,0,0,0.2));">${emoji}</div><div style="font-size:0.7rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">${prod.nombre.substring(0, 18)}</div></div>`;
+
+  let imgBlock;
+  if (prod.imgPath) {
+    const srcEncoded = prod.imgPath.replace(/ /g, '%20');
+    imgBlock = `<img src="${srcEncoded}" alt="${escapeHtml(prod.nombre)}" ${lazyAttr} style="width:100%; height:100%; object-fit:contain; padding:16px;" onerror="handleImgError(this, '.img-fallback')">${fallbackCard}`;
+  } else {
+    imgBlock = `<div class="img-fallback" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;"><div style="font-size:3.5rem;">${emoji}</div><div style="font-size:0.7rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">${prod.nombre.substring(0, 18)}</div></div>`;
+  }
+
+  const isFav = favorites.some(f => f.id === prod.id);
+  const heartSvg = isFav
+    ? `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" style="width:20px;height:20px;color:#ff4757;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:20px;height:20px;color:#a0a0a0;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  return `
+    <div class="card" data-id="${prod.id}">
+      <div class="card-img">
+        ${imgBlock}
+        <div class="badge-gen"> Inspiraciones Premium</div>
+        <button class="card-fav-btn" data-id="${prod.id}" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.9);border:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;box-shadow:0 4px 12px rgba(0,0,0,0.08);transition:all 0.3s ease;">${heartSvg}</button>
+      </div>
+      <div class="card-body">
+        <div class="card-genero">${generoLabel}</div>
+        <div class="card-nombre">${escapeHtml(prod.nombre)}</div>
+        <button class="btn-ver-detalle" data-id="${prod.id}"> Ver acordes</button>
+      </div>
+    </div>`;
+}
+
+/** Agrega event listeners a las cards recién insertadas */
+function bindCardEvents(cards) {
+  cards.forEach(card => {
+    const favBtn = card.querySelector('.card-fav-btn');
+    if (favBtn) {
+      favBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = favBtn.dataset.id;
+        const product = allProducts.find(p => String(p.id) === String(id));
+        if (product) toggleFavorite(product);
+      });
+    }
+    card.addEventListener('click', (e) => {
+      if (e.target.classList.contains('card-fav-btn') || e.target.closest('.card-fav-btn')) return;
+      const id = card.dataset.id;
+      const product = allProducts.find(p => String(p.id) === String(id));
+      if (product) openModal(product);
+    });
+    const detailBtn = card.querySelector('.btn-ver-detalle');
+    if (detailBtn) {
+      detailBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = detailBtn.dataset.id;
+        const product = allProducts.find(p => String(p.id) === String(id));
+        if (product) openModal(product);
+      });
+    }
+  });
+}
+
+/**
+ * Carga el siguiente lote de cards (PAGE_SIZE) al grid,
+ * sin borrar lo que ya está pintado.
+ */
+function loadNextPage() {
+  if (isLoadingPage) return;
+  const start = currentPage * PAGE_SIZE;
+  const end   = Math.min(start + PAGE_SIZE, filteredProducts.length);
+  if (start >= filteredProducts.length) return;
+
+  isLoadingPage = true;
+  const isFirstBatch = (currentPage === 0);
+  const fragment = document.createDocumentFragment();
+  const newCards = [];
+
+  for (let i = start; i < end; i++) {
+    const el = document.createElement('div');
+    el.innerHTML = buildCardHtml(filteredProducts[i], i - start, isFirstBatch).trim();
+    const card = el.firstElementChild;
+    fragment.appendChild(card);
+    newCards.push(card);
+  }
+
+  productosGrid.appendChild(fragment);
+  bindCardEvents(newCards);
+  currentPage++;
+  isLoadingPage = false;
+
+  requestAnimationFrame(() => observeNewCards(newCards));
+}
+
+/**
+ * Listener de scroll para carga infinita.
+ * El evento 'scroll' SOLO se dispara cuando el usuario mueve la página —
+ * no puede entrar en bucle a diferencia del IntersectionObserver.
+ */
+function handleScrollPagination() {
+  // No hacer nada si ya cargamos todo o si estamos cargando
+  if (isLoadingPage) return;
+  if (currentPage * PAGE_SIZE >= filteredProducts.length) return;
+
+  // Disparar cuando el usuario esté a 400px del final del grid
+  const gridBottom = productosGrid.getBoundingClientRect().bottom;
+  const triggerAt = window.innerHeight + 400;
+
+  if (gridBottom < triggerAt) {
+    loadNextPage();
+  }
+}
+
+// Registrar el listener de scroll UNA SOLA VEZ (al cargar la página)
+window.addEventListener('scroll', handleScrollPagination, { passive: true });
+
+
+
+/** Función principal: filtra y arranca la paginación desde cero */
 function renderProducts() {
   const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-  let filtered = allProducts.filter(p => {
+
+  filteredProducts = allProducts.filter(p => {
     if (filtroGenero !== 'todos' && p.genero !== filtroGenero) return false;
     if (searchTerm && !p.nombre.toLowerCase().includes(searchTerm)) return false;
     return true;
   });
 
-  if (resultCounter) resultCounter.innerText = `${filtered.length} productos`;
+  if (resultCounter) resultCounter.innerText = `${filteredProducts.length} productos`;
 
-  if (filtered.length === 0) {
+  // Limpiar grid y resetear estado de paginación
+  productosGrid.innerHTML = '';
+  currentPage = 0;
+  isLoadingPage = false;
+
+  if (filteredProducts.length === 0) {
     productosGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:60px 20px;">
-      <div style="font-size:4rem; margin-bottom:20px; opacity:0.5;">🔍</div>
+      <div style="font-size:4rem; margin-bottom:20px; opacity:0.5;">\uD83D\uDD0D</div>
       <h3 style="color:var(--texto); margin-bottom:10px;">No se encontraron fragancias</h3>
       <p style="color:var(--texto-suave);">Prueba con otro nombre o revisa los filtros</p>
     </div>`;
     return;
   }
 
-  let html = "";
-  filtered.forEach(prod => {
-    const generoLabel = prod.genero === 'caballero' ? 'Caballero' : 'Dama';
-    const emoji = prod.genero === 'caballero' ? '👔' : '👗';
-
-    let imgBlock = "";
-    const fallbackCard = `<div class="img-fallback" style="width:100%; height:100%; display:none; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;"><div style="font-size:3.5rem; filter:drop-shadow(2px 4px 6px rgba(0,0,0,0.2));">${emoji}</div><div style="font-size:0.7rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">${prod.nombre.substring(0, 18)}</div></div>`;
-    if (prod.imgPath) {
-      const srcEncoded = prod.imgPath.replace(/ /g, '%20');
-      imgBlock = `<img src="${srcEncoded}" alt="${escapeHtml(prod.nombre)}" style="width:100%; height:100%; object-fit:contain; padding:16px;" onerror="handleImgError(this, '.img-fallback')">${fallbackCard}`;
-    } else {
-      imgBlock = `<div class="img-fallback" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #e8d5c0, #d4bca0); border-radius:24px 24px 0 0;"><div style="font-size:3.5rem;">${emoji}</div><div style="font-size:0.7rem; font-weight:600; color:#7a5a3a; margin-top:8px; background:rgba(255,255,255,0.7); padding:4px 12px; border-radius:30px;">${prod.nombre.substring(0, 18)}</div></div>`;
-    }
-
-    const isFav = favorites.some(f => f.id === prod.id);
-    const heartSvg = isFav ?
-      `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:20px; height:20px; color:#ff4757;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg>` :
-      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:20px; height:20px; color:#a0a0a0;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-
-    html += `
-      <div class="card" data-id="${prod.id}">
-        <div class="card-img">
-          ${imgBlock}
-          <div class="badge-gen"> Inspiraciones Premium</div>
-          <button class="card-fav-btn" data-id="${prod.id}" style="position:absolute; top:12px; right:12px; background:rgba(255,255,255,0.9); border:none; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:10; box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:all 0.3s ease;">${heartSvg}</button>
-        </div>
-        <div class="card-body">
-          <div class="card-genero">${generoLabel}</div>
-          <div class="card-nombre">${escapeHtml(prod.nombre)}</div>
-          <button class="btn-ver-detalle" data-id="${prod.id}"> Ver acordes</button>
-        </div>
-      </div>
-    `;
-  });
-
-  productosGrid.innerHTML = html;
-
-  // Botón favorito en tarjeta
-  document.querySelectorAll('.card-fav-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const id = parseInt(btn.dataset.id) || btn.dataset.id;
-      const product = allProducts.find(p => String(p.id) === String(id));
-      if (product) toggleFavorite(product);
-    });
-  });
-
-  // Click en tarjeta para abrir modal
-  document.querySelectorAll('.card, .btn-ver-detalle').forEach(card => {
-    card.addEventListener('click', (e) => {
-      if (e.target.classList.contains('card-fav-btn') || e.target.closest('.card-fav-btn')) return;
-      const cardDiv = e.target.closest('.card');
-      if (cardDiv) {
-        const id = cardDiv.dataset.id;
-        const product = allProducts.find(p => String(p.id) === String(id));
-        if (product) openModal(product);
-      }
-    });
-  });
-
-  observeCards();
+  // Cargar el primer lote de cards
+  loadNextPage();
 }
+
 
 // ========== FAVORITOS ==========
 function saveFavorites() {
@@ -382,9 +463,18 @@ function closeIntegratedSearchMode() {
     bottomNav.style.bottom = "25px";
   }
   document.body.classList.remove('search-mode-active');
+
+  // FIX: Limpiar ambos inputs y re-renderizar con todos los productos
   if (integratedSearchInput) integratedSearchInput.value = '';
   if (searchInput) searchInput.value = '';
+
+  // FIX: Limpiar el botón X del buscador desktop
+  const clearBtn = document.getElementById('clearSearch');
+  if (clearBtn) clearBtn.style.display = 'none';
+
   if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+
+  // FIX: renderProducts se llama ANTES del scroll para evitar layout shifts
   renderProducts();
   hideKeyboard();
   requestAnimationFrame(() => { window.scrollTo({ top: savedScrollBeforeSearch, behavior: 'instant' }); });
@@ -447,7 +537,7 @@ document.querySelectorAll('.filtro-btn').forEach(btn => {
   });
 });
 
-// Botón limpiar búsqueda
+// Botón limpiar búsqueda desktop
 const clearSearchBtn = document.getElementById('clearSearch');
 if (clearSearchBtn) {
   clearSearchBtn.addEventListener('click', () => {
@@ -479,22 +569,43 @@ setupSearchHandlers();
 const mobileSearchBtn = document.getElementById('mobileSearchBtn');
 const closeIntegratedSearchBtn = document.getElementById('closeIntegratedSearch');
 
-mobileSearchBtn?.addEventListener('click', openMobileSearch);
-closeIntegratedSearchBtn?.addEventListener('click', closeIntegratedSearchMode);
+// FIX: Botones móviles — asegurar que los listeners se registran y funcionan
+if (mobileSearchBtn) {
+  mobileSearchBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openMobileSearch();
+  });
+}
+
+if (closeIntegratedSearchBtn) {
+  closeIntegratedSearchBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeIntegratedSearchMode();
+  });
+}
 
 // Favoritos overlay
 const mobileFavBtn = document.getElementById('mobileFavBtn');
 const favOverlay = document.getElementById('favOverlay');
 const closeFavBtn = document.getElementById('closeFavBtn');
 
-mobileFavBtn?.addEventListener('click', () => {
-  if (favOverlay) favOverlay.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-  setActiveNavItem('mobileFavBtn');
-  toggleMobileBars(false);
-});
+if (mobileFavBtn) {
+  mobileFavBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (favOverlay) favOverlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    setActiveNavItem('mobileFavBtn');
+    toggleMobileBars(false);
+  });
+}
 
-closeFavBtn?.addEventListener('click', closeFavOverlay);
+if (closeFavBtn) {
+  closeFavBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeFavOverlay();
+  });
+}
+
 favOverlay?.addEventListener('click', (e) => { if (e.target === favOverlay) closeFavOverlay(); });
 
 function closeFavOverlay() {
@@ -506,13 +617,16 @@ function closeFavOverlay() {
 
 // Notificaciones
 const mobileNotifBtn = document.getElementById('mobileNotifBtn');
-mobileNotifBtn?.addEventListener('click', () => {
-  showToast("🎉 ¡Pronto! Tendremos novedades de fragancias aquí.");
-  setActiveNavItem('mobileNotifBtn');
-  const dot = document.getElementById('notifDot');
-  if (dot) dot.style.display = 'none';
-  setTimeout(() => setActiveNavItem('mobileHomeBtn'), 2000);
-});
+if (mobileNotifBtn) {
+  mobileNotifBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showToast("🎉 ¡Pronto! Tendremos novedades de fragancias aquí.");
+    setActiveNavItem('mobileNotifBtn');
+    const dot = document.getElementById('notifDot');
+    if (dot) dot.style.display = 'none';
+    setTimeout(() => setActiveNavItem('mobileHomeBtn'), 2000);
+  });
+}
 
 setTimeout(() => {
   const dot = document.getElementById('notifDot');
@@ -549,32 +663,54 @@ window.addEventListener('scroll', () => {
   });
 }, { passive: true });
 
-// IntersectionObserver para animación de cards
-const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
-const cardObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('active');
-      cardObserver.unobserve(entry.target);
-    }
-  });
-}, observerOptions);
+// ========== INTERSECTION OBSERVER PARA ANIMACIÓN DE CARDS ==========
+// FIX: Desconectar el observer antes de re-crear para evitar observers huérfanos
+let cardObserver = null;
 
-function observeCards() {
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
+function createCardObserver() {
+  if (cardObserver) {
+    cardObserver.disconnect();
+  }
+  const observerOptions = { root: null, rootMargin: '0px 0px 50px 0px', threshold: 0.05 };
+  cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+  return cardObserver;
+}
+
+/**
+ * Anima sólo las cards del lote recién insertado (paginación infinita).
+ * Las primeras visibles se animan con delay escalonado; las que están
+ * fuera de la pantalla se observan para animarse al hacer scroll.
+ */
+function observeNewCards(newCards) {
+  if (!newCards || newCards.length === 0) return;
+  const observer = createCardObserver();
+
+  newCards.forEach((card, index) => {
     card.classList.add('reveal');
     const rect = card.getBoundingClientRect();
-    if (rect.top < window.innerHeight) {
-      card.classList.add('active');
+    if (rect.top < window.innerHeight + 150) {
+      setTimeout(() => card.classList.add('active'), Math.min(index * 25, 250));
     } else {
-      cardObserver.observe(card);
+      observer.observe(card);
     }
   });
-  // Fallback visibilidad
+
+  // Fallback: visibilidad garantizada a los 700ms
   setTimeout(() => {
-    document.querySelectorAll('.card.reveal:not(.active)').forEach(c => c.classList.add('active'));
-  }, 600);
+    newCards.forEach(c => { if (!c.classList.contains('active')) c.classList.add('active'); });
+  }, 700);
+}
+
+/** Alias legacy para compatibilidad (ya no se usa en el flujo normal) */
+function observeCards() {
+  observeNewCards(Array.from(document.querySelectorAll('.card')));
 }
 
 // Cerrar modal con botón atrás del navegador
